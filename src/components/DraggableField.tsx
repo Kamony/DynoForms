@@ -1,7 +1,8 @@
 import React from 'react';
 import { ElementTypes } from '../types/ElementTypes';
 import { useDrag } from 'react-dnd';
-import {makeStyles, Typography} from '@material-ui/core';
+import { ListItem, ListItemAvatar, ListItemText, makeStyles } from '@material-ui/core';
+import { Help } from '@material-ui/icons';
 
 type Props = {
     type: ElementTypes;
@@ -32,9 +33,9 @@ export const DraggableField: React.FC<Props> = (props: Props) => {
         }),
     });
     return (
-        <div className={classes.card} ref={drag} style={{ opacity: isDragging ? 0.8 : 1 }}>
-            {props.icon ? props.icon : null}
-            <Typography variant={'caption'}>{props.label}</Typography>
-        </div>
+        <ListItem ref={drag} style={{ opacity: isDragging ? 0.8 : 1 }}>
+            <ListItemAvatar>{props.icon ? props.icon : <Help color={'secondary'} />}</ListItemAvatar>
+            <ListItemText primary={props.label} />
+        </ListItem>
     );
 };

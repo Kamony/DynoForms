@@ -1,48 +1,86 @@
 import React from 'react';
-import { Button, CardActions, CardContent, CardHeader, Paper, TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
-import { SimplePopover } from '../../containers/Popover';
+import {
+    Button, Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControlLabel,
+    TextField
+} from '@material-ui/core';
 
-type Props = {};
+export type InputFields = {
+    label: string;
+    placeholder: string;
+    required: boolean;
+};
 
-const useStyles = makeStyles({
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-        minHeight: 90,
-    },
-});
+export const TextInput: React.FC<InputFields> = (props: InputFields) => {
+    return (
+        <TextField
+            id="standard-basic"
+            label={props.label}
+            placeholder={props.placeholder}
+            required={props.required}
+            fullWidth={true}
+            margin="none"
+        />
+    );
+};
 
-export const TextInput: React.FC<Props> = (props: Props) => {
-    const classes = useStyles();
-    const [label, setLabel] = React.useState('Label');
-    const [state, setState] = React.useState({
-        label: 'Label',
+type ActionProps = {
+    open: boolean;
+    onClose: () => void;
+    onSave: (payload: InputFields) => void;
+};
+
+export const TextInputEditDialog: React.FC<ActionProps> = (props: ActionProps) => {
+    const [values, setValues] = React.useState<InputFields>({
+        label: 'label',
+        placeholder: 'placeholder',
+        required: false,
     });
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.value);
-        setLabel(event.target.value);
+    const handleChange = (name: keyof InputFields) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValues({ ...values, [name]: event.target.value });
+    };
+
+    const handleSave = () => {
+        props.onSave(values);
     };
 
     return (
-        <Paper className={classes.container}>
-            <TextField id="standard-basic" label={label} margin="normal" />
-            <SimplePopover>
-                <CardHeader title="Edit input field" />
-                <CardContent>
-                    <TextField id="edit-label" label={'Input Label'} onChange={handleChange} value={label} variant={'outlined'} />
-                </CardContent>
-                <CardActions>
-                    <Button size="small" color="primary">
-                        Share
-                    </Button>
-                    <Button size="small" color="primary">
-                        Learn More
-                    </Button>
-                </CardActions>
-            </SimplePopover>
-        </Paper>
+        <Dialog open={props.open} onClose={props.onClose} aria-labelledby="edit-inputField-dialog">
+            <DialogTitle id="form-dialog-title">Edit input field</DialogTitle>
+            <DialogContent>
+                <TextField
+                    id="edit-label"
+                    label={'Input Label'}
+                    variant={'outlined'}
+                    value={values.label}
+                    onChange={handleChange('label')}
+                />
+                <TextField
+                    id="edit-label"
+                    label={'Input Placeholder'}
+                    variant={'outlined'}
+                    value={values.placeholder}
+                    onChange={handleChange('placeholder')}
+                />
+                <FormControlLabel
+                    control={<Checkbox color="primary" value={values.required} onChange={handleChange('required')} />}
+                    label="Required"
+                    labelPlacement="start"
+                />
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={props.onClose} color="primary">
+                    Cancel
+                </Button>
+                <Button onClick={handleSave} color="primary">
+                    Save
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 };
