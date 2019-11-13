@@ -4,32 +4,9 @@ import { DragObjectWithType, useDrop } from 'react-dnd';
 import { ElementTypes } from '../../types/ElementTypes';
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import { InputFields, TextInput, TextInputEditDialog } from '../../components/form-fields/Input';
-import { FormElement } from '../form-element/FormElement';
-import { Delete, Edit, FileCopy } from '@material-ui/icons';
+import { TextInputBuilder } from '../../components/form-build-elements/TextInputBuilder';
 
 const RenderFormElement = ({ object, id }: { object: DragObjectWithType; id?: number }) => {
-    const [textElement, setTextElement] = React.useState<InputFields>({
-        label: 'default label',
-        placeholder: 'default placeholder',
-        required: false,
-    });
-
-    const [editOpen, setEditOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setEditOpen(true);
-    };
-
-    const handleClose = () => {
-        setEditOpen(false);
-    };
-
-    const handleSaveClick = (payload: InputFields) => {
-        setTextElement(payload);
-        handleClose();
-    };
-
     switch (object.type) {
         case ElementTypes.BUTTON:
             return (
@@ -38,28 +15,7 @@ const RenderFormElement = ({ object, id }: { object: DragObjectWithType; id?: nu
                 </Button>
             );
         case ElementTypes.INPUT:
-            return (
-                <>
-                    <FormElement
-                        title={'Input field'}
-                        element={<TextInput {...textElement} />}
-                        actions={[
-                            {
-                                icon: <Delete color={'secondary'} />,
-                                name: 'Delete',
-                                onClick: () => console.log('delete click'),
-                            },
-                            {
-                                icon: <FileCopy color={'secondary'} />,
-                                name: 'Copy',
-                                onClick: () => console.log('copy click'),
-                            },
-                            { icon: <Edit color={'secondary'} />, name: 'Edit', onClick: () => handleClickOpen() },
-                        ]}
-                    />
-                    <TextInputEditDialog open={editOpen} onSave={handleSaveClick} onClose={handleClose} />
-                </>
-            );
+            return <TextInputBuilder />;
         default:
             return null;
     }
