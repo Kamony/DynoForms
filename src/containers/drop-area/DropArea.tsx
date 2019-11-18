@@ -6,6 +6,9 @@ import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { TextInputBuilder } from '../../components/form-build-elements/TextInputBuilder';
 
+import { useStore } from '../../store/FormStore';
+import { uuid } from '../../utils/uuid';
+
 const RenderFormElement = ({ object, id }: { object: DragObjectWithType; id?: number }) => {
     switch (object.type) {
         case ElementTypes.BUTTON:
@@ -35,23 +38,26 @@ const useStyles = makeStyles({
 });
 
 export const DropArea = () => {
-    const [elements, setElements] = React.useState<DragObjectWithType[]>([]);
+    const [elements, addElement] = useStore(s => s.elements, a => a.addFormElement);
+    const classes = useStyles();
+
     const [collectedProps, drop] = useDrop({
         accept: [ElementTypes.BUTTON, ElementTypes.INPUT],
         drop: (type, el) => {
             console.log('drop', { type, el });
-            setElements([...elements, type]);
+            // setElements([...elements, type]);
+            addElement({ id: uuid(), type: type });
         },
     });
-    const classes = useStyles();
+
     return (
         <Box display={'flex'} flexDirection={'column'}>
             <Typography variant={'h5'} color={'primary'} gutterBottom>
                 Drop Area
             </Typography>
             <Paper ref={drop} className={classes.root}>
-                {elements.map((element, index) => (
-                    <RenderFormElement object={element} key={index} />
+                {elements.map(el => (
+                    <RenderFormElement object={el.type} />
                 ))}
             </Paper>
         </Box>
