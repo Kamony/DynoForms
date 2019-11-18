@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardActions, CardContent, CardHeader } from '@material-ui/core';
-import {ActionType, OpenIconSpeedDial} from '../../components/SpeedDial';
+import { Card, CardContent, CardHeader } from '@material-ui/core';
+import { ActionType, OpenIconSpeedDial } from '../../components/SpeedDial';
 
 type Props = {
     title: string;

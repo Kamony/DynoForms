@@ -6,10 +6,10 @@ import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { TextInputBuilder } from '../../components/form-build-elements/TextInputBuilder';
 
-import { useStore } from '../../store/FormStore';
+import { useStore } from '../../store';
 import { uuid } from '../../utils/uuid';
 
-const RenderFormElement = ({ object, id }: { object: DragObjectWithType; id?: number }) => {
+const RenderFormElement = ({ object, id }: { object: DragObjectWithType; id: string }) => {
     switch (object.type) {
         case ElementTypes.BUTTON:
             return (
@@ -18,7 +18,7 @@ const RenderFormElement = ({ object, id }: { object: DragObjectWithType; id?: nu
                 </Button>
             );
         case ElementTypes.INPUT:
-            return <TextInputBuilder />;
+            return <TextInputBuilder id={id} />;
         default:
             return null;
     }
@@ -41,12 +41,10 @@ export const DropArea = () => {
     const [elements, addElement] = useStore(s => s.elements, a => a.addFormElement);
     const classes = useStyles();
 
-    const [collectedProps, drop] = useDrop({
+    const [, drop] = useDrop({
         accept: [ElementTypes.BUTTON, ElementTypes.INPUT],
-        drop: (type, el) => {
-            console.log('drop', { type, el });
-            // setElements([...elements, type]);
-            addElement({ id: uuid(), type: type });
+        drop: typeElement => {
+            addElement({ id: uuid(), type: typeElement.type });
         },
     });
 
@@ -57,7 +55,7 @@ export const DropArea = () => {
             </Typography>
             <Paper ref={drop} className={classes.root}>
                 {elements.map(el => (
-                    <RenderFormElement object={el.type} />
+                    <RenderFormElement object={el} id={el.id} key={el.id} />
                 ))}
             </Paper>
         </Box>

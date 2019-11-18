@@ -3,8 +3,11 @@ import { FormElement } from '../../containers/form-element/FormElement';
 import { Delete, Edit, FileCopy } from '@material-ui/icons';
 import { InputFields, TextInput, TextInputEditDialog } from '../form-fields/input';
 import { useDialog } from '../../hooks/useDialog';
+import {useStore} from "../../store";
 
-type Props = {};
+type Props = {
+    id: string;
+};
 
 export const TextInputBuilder: React.FC<Props> = (props: Props) => {
     const [textElement, setTextElement] = React.useState<InputFields>({
@@ -13,11 +16,22 @@ export const TextInputBuilder: React.FC<Props> = (props: Props) => {
         required: false,
     });
 
+    const [, storeActions] = useStore(undefined, a => a);
+
     const { open, handleOpen, handleClose } = useDialog(false);
 
     const handleSaveClick = (payload: InputFields) => {
         setTextElement(payload);
         handleClose();
+    };
+
+    const handleDeleteClick = () => {
+        console.log('wanna delete', props.id);
+        storeActions.removeFormElement(props.id);
+    };
+
+    const handleCopyClick = () => {
+        storeActions.copyFormElement(props.id);
     };
 
     return (
@@ -29,14 +43,14 @@ export const TextInputBuilder: React.FC<Props> = (props: Props) => {
                     {
                         icon: <Delete color={'secondary'} />,
                         name: 'Delete',
-                        onClick: () => console.log('delete click'),
+                        onClick: handleDeleteClick,
                     },
                     {
                         icon: <FileCopy color={'secondary'} />,
                         name: 'Copy',
-                        onClick: () => console.log('copy click'),
+                        onClick: handleCopyClick,
                     },
-                    { icon: <Edit color={'secondary'} />, name: 'Edit', onClick: () => handleOpen() },
+                    { icon: <Edit color={'secondary'} />, name: 'Edit', onClick: handleOpen },
                 ]}
             />
             <TextInputEditDialog open={open} onSave={handleSaveClick} onClose={handleClose} />

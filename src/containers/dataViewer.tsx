@@ -1,11 +1,11 @@
 import React from 'react';
-import { useStore } from '../store/FormStore';
+import { useStore } from '../store';
 import { makeStyles, useTheme } from '@material-ui/styles';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Theme, Typography } from '@material-ui/core';
 
 type Props = {};
 
-const useStyles = makeStyles((theme: any) => {
+const useStyles = makeStyles((theme: Theme) => {
     console.log(theme);
     return {
         root: {
