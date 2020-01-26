@@ -7,6 +7,7 @@ export type IActions = {
     addFormElementAtIndex: (element: ElementType, index: number) => void;
     removeFormElement: (id: string) => void;
     copyFormElement: (id: string) => void;
+    swapFormElements: (elementIndex: number, newPositionIndex: number) => void;
 };
 
 export const actions: StoreActions<IState, IActions> = {
@@ -37,5 +38,12 @@ export const actions: StoreActions<IState, IActions> = {
             };
             actions.addFormElementAtIndex(store, newElement, index + 1);
         }
+    },
+    swapFormElements: (store, oldIndex, newIndex) => {
+        const elements = [...store.state.elements];
+        elements[oldIndex] = elements.splice(newIndex, 1, elements[oldIndex])[0];
+        store.setState({
+            elements: elements,
+        });
     },
 };

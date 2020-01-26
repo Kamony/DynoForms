@@ -9,7 +9,7 @@ import { TextInputBuilder } from '../../components/form-build-elements/TextInput
 import { useStore } from '../../store';
 import { uuid } from '../../utils/uuid';
 
-const RenderFormElement = ({ object, id }: { object: DragObjectWithType; id: string }) => {
+const RenderFormElement = ({ object, id, index }: { object: DragObjectWithType; id: string; index: number }) => {
     switch (object.type) {
         case ElementTypes.BUTTON:
             return (
@@ -18,7 +18,7 @@ const RenderFormElement = ({ object, id }: { object: DragObjectWithType; id: str
                 </Button>
             );
         case ElementTypes.INPUT:
-            return <TextInputBuilder id={id} />;
+            return <TextInputBuilder id={id} index={index} />;
         default:
             return null;
     }
@@ -54,8 +54,8 @@ export const DropArea = () => {
                 Drop Area
             </Typography>
             <Paper ref={drop} className={classes.root}>
-                {elements.map(el => (
-                    <RenderFormElement object={el} id={el.id} key={el.id} />
+                {elements.map((el, i) => (
+                    <RenderFormElement object={el} id={el.id} key={el.id} index={i} />
                 ))}
             </Paper>
         </Box>
