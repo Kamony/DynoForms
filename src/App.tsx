@@ -4,7 +4,6 @@ import { DropArea } from './containers/drop-area/DropArea';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { FieldBox } from './containers/field-box/FieldBox';
-import { DataViewer } from './containers/dataViewer';
 import { ThemeProvider } from '@material-ui/styles';
 import { theme } from './theme/theme';
 import { DebugPanel } from './components/DebugPanel';
