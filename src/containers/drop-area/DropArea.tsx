@@ -32,7 +32,7 @@ const useStyles = makeStyles({
         padding: 10,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        justifyContent: 'flex-start',
         flexDirection: 'column',
     },
 });

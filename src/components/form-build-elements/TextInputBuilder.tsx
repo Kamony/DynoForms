@@ -3,7 +3,7 @@ import { FormElement } from '../../containers/form-element/FormElement';
 import { Delete, Edit, FileCopy } from '@material-ui/icons';
 import { InputFields, TextInput, TextInputEditDialog } from '../form-fields/input';
 import { useDialog } from '../../hooks/useDialog';
-import {useStore} from "../../store";
+import { useStore } from '../../store';
 
 type Props = {
     id: string;

@@ -22,8 +22,6 @@ const useStyles = makeStyles((theme: Theme) => {
 export const DataViewer: React.FC<Props> = (props: Props) => {
     const classes = useStyles();
     const [elements] = useStore(s => s.elements);
-    const theme = useTheme();
-    console.log(theme);
     return (
         <Box display={'flex'} flexDirection={'column'}>
             <Typography variant={'h5'} color={'primary'} gutterBottom>
