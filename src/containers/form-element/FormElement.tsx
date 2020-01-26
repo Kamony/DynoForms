@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(1),
         },
         pointer: {
-            cursor: 'grab',
+            cursor: 'move',
         },
     }),
 );
