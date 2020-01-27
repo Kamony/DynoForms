@@ -11,7 +11,7 @@ type Props = {
 
 const useStyles = makeStyles({
     container: {
-        width: 300,
+        width: 250,
         height: 500,
     },
 });

@@ -1,10 +1,15 @@
 import React from 'react';
 import { FormElement } from '../../containers/form-element/FormElement';
-import { Delete, Edit, FileCopy } from '@material-ui/icons';
+import { DeleteOutlined, EditOutlined, FileCopyOutlined } from '@material-ui/icons';
 import { InputFields, TextInput, TextInputEditDialog } from '../form-fields/input';
 import { useDialog } from '../../hooks/useDialog';
+import { useStore } from '../../store';
+import { useTheme } from '@material-ui/core';
 
-type Props = {};
+type Props = {
+    id: string;
+    index: number;
+};
 
 export const TextInputBuilder: React.FC<Props> = (props: Props) => {
     const [textElement, setTextElement] = React.useState<InputFields>({
@@ -13,30 +18,51 @@ export const TextInputBuilder: React.FC<Props> = (props: Props) => {
         required: false,
     });
 
+    const [, storeActions] = useStore(undefined, a => a);
+
     const { open, handleOpen, handleClose } = useDialog(false);
+    const theme = useTheme();
 
     const handleSaveClick = (payload: InputFields) => {
         setTextElement(payload);
         handleClose();
     };
 
+    const handleDeleteClick = () => {
+        console.log('wanna delete', props.id);
+        storeActions.removeFormElement(props.id);
+    };
+
+    const handleCopyClick = () => {
+        storeActions.copyFormElement(props.id);
+    };
+
     return (
         <div style={{ width: '100%', margin: 10 }}>
             <FormElement
+                id={props.id}
+                index={props.index}
                 title={'Input field'}
                 element={<TextInput {...textElement} />}
                 actions={[
                     {
-                        icon: <Delete color={'secondary'} />,
-                        name: 'Delete',
-                        onClick: () => console.log('delete click'),
+                        icon: <EditOutlined color={'action'} />,
+                        name: 'Edit',
+                        color: theme.palette.grey.A100,
+                        onClick: handleOpen,
                     },
                     {
-                        icon: <FileCopy color={'secondary'} />,
+                        icon: <FileCopyOutlined color={'action'} />,
                         name: 'Copy',
-                        onClick: () => console.log('copy click'),
+                        color: theme.palette.grey.A100,
+                        onClick: handleCopyClick,
                     },
-                    { icon: <Edit color={'secondary'} />, name: 'Edit', onClick: () => handleOpen() },
+                    {
+                        icon: <DeleteOutlined color={'error'} />,
+                        name: 'Delete',
+                        color: theme.palette.error.main,
+                        onClick: handleDeleteClick,
+                    },
                 ]}
             />
             <TextInputEditDialog open={open} onSave={handleSaveClick} onClose={handleClose} />

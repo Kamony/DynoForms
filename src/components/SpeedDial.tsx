@@ -7,6 +7,7 @@ import EditIcon from '@material-ui/icons/Edit';
 export type ActionType = {
     icon: React.ReactNode;
     name: string;
+    color: string;
     onClick: () => void;
 };
 

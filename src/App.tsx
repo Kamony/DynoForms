@@ -1,13 +1,12 @@
 import React from 'react';
-import { Box, Container, createMuiTheme, CssBaseline, Typography } from '@material-ui/core';
+import { Box, Container, CssBaseline, Typography } from '@material-ui/core';
 import { DropArea } from './containers/drop-area/DropArea';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { FieldBox } from './containers/field-box/FieldBox';
-import { DataViewer } from './containers/dataViewer';
-import { ThemeProvider, DefaultTheme } from '@material-ui/styles';
-
-const theme = createMuiTheme();
+import { ThemeProvider } from '@material-ui/styles';
+import { theme } from './theme/theme';
+import { DebugPanel } from './components/DebugPanel';
 
 const App: React.FC = () => {
     return (
@@ -15,15 +14,15 @@ const App: React.FC = () => {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <Container>
-                    <Typography align={'center'} variant={'h2'} color={'secondary'} gutterBottom>
+                    <Typography variant={'caption'} color={'secondary'} gutterBottom>
                         DynoForms
                     </Typography>
                     <Box display="flex" flexDirection={'row'} justifyContent={'space-around'}>
                         <FieldBox />
                         <DropArea />
-                        <DataViewer />
                     </Box>
                 </Container>
+                <DebugPanel />
             </ThemeProvider>
         </DndProvider>
     );
