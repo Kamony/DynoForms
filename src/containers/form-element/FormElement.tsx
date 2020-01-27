@@ -1,10 +1,11 @@
 import React from 'react';
-import { createStyles, Grid, makeStyles, Paper, Theme, Typography } from '@material-ui/core';
+import { createStyles, Divider, Grid, makeStyles, Paper, Theme, Typography } from '@material-ui/core';
 import { ActionType } from '../../components/SpeedDial';
 import { DragHandleOutlined } from '@material-ui/icons';
 import { useDrag, useDrop, XYCoord } from 'react-dnd';
 import { ElementTypes } from '../../types/ElementTypes';
 import { useStore } from '../../store';
+import { FormElementToolbox } from './ActionToolbox';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -14,52 +15,14 @@ const useStyles = makeStyles((theme: Theme) =>
         pointer: {
             cursor: 'move',
         },
-    }),
-);
-
-type ToolBoxProps = {
-    actions: ActionType[];
-};
-
-const useToolboxStyles = makeStyles((theme: Theme) =>
-    createStyles({
         container: {
-            display: 'flex',
-            flexDirection: 'row',
+            width: '100%',
             borderWidth: 1,
             borderStyle: 'solid',
             borderColor: theme.palette.grey.A100,
-            borderBottomLeftRadius: theme.shape.borderRadius,
-            borderTopWidth: 0,
-        },
-        actionItem: {
-            padding: theme.spacing(0.2, 1, 0.2, 1),
-            borderRightWidth: 1,
-            borderRightStyle: 'solid',
-            borderRightColor: theme.palette.grey.A100,
-            cursor: 'pointer',
-            '&:last-child': {
-                borderRight: 'none',
-            },
-            '&:hover': {
-                backgroundColor: theme.palette.action.hover,
-            },
         },
     }),
 );
-
-const FormElementToolbox: React.FC<ToolBoxProps> = props => {
-    const classes = useToolboxStyles();
-    return (
-        <div className={classes.container}>
-            {props.actions.map((action, i) => (
-                <div className={classes.actionItem} onClick={action.onClick} title={action.name} key={i}>
-                    {action.icon}
-                </div>
-            ))}
-        </div>
-    );
-};
 
 type Props = {
     title: string;
@@ -133,7 +96,7 @@ export const FormElement: React.FC<Props> = (props: Props) => {
     drag(drop(ref));
 
     return (
-        <Paper style={{ width: '100%', opacity }} square ref={ref}>
+        <Paper className={classes.container} style={{ opacity }} ref={ref} elevation={0}>
             <Grid container direction={'column'}>
                 <Grid item container direction={'row'} justify={'space-between'}>
                     <Grid item className={classes.pointer}>
@@ -145,7 +108,7 @@ export const FormElement: React.FC<Props> = (props: Props) => {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <FormElementToolbox actions={props.actions} />
+                        <FormElementToolbox formElementId={props.id} actions={props.actions} />
                     </Grid>
                 </Grid>
                 <Grid item className={classes.spacing}>

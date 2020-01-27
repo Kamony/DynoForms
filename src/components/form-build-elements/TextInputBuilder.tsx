@@ -1,9 +1,8 @@
 import React from 'react';
 import { FormElement } from '../../containers/form-element/FormElement';
-import { DeleteOutlined, EditOutlined, FileCopyOutlined } from '@material-ui/icons';
+import { EditOutlined } from '@material-ui/icons';
 import { InputFields, TextInput, TextInputEditDialog } from '../form-fields/input';
 import { useDialog } from '../../hooks/useDialog';
-import { useStore } from '../../store';
 import { useTheme } from '@material-ui/core';
 
 type Props = {
@@ -17,24 +16,12 @@ export const TextInputBuilder: React.FC<Props> = (props: Props) => {
         placeholder: 'default placeholder',
         required: false,
     });
-
-    const [, storeActions] = useStore(undefined, a => a);
-
     const { open, handleOpen, handleClose } = useDialog(false);
     const theme = useTheme();
 
     const handleSaveClick = (payload: InputFields) => {
         setTextElement(payload);
         handleClose();
-    };
-
-    const handleDeleteClick = () => {
-        console.log('wanna delete', props.id);
-        storeActions.removeFormElement(props.id);
-    };
-
-    const handleCopyClick = () => {
-        storeActions.copyFormElement(props.id);
     };
 
     return (
@@ -50,18 +37,6 @@ export const TextInputBuilder: React.FC<Props> = (props: Props) => {
                         name: 'Edit',
                         color: theme.palette.grey.A100,
                         onClick: handleOpen,
-                    },
-                    {
-                        icon: <FileCopyOutlined color={'action'} />,
-                        name: 'Copy',
-                        color: theme.palette.grey.A100,
-                        onClick: handleCopyClick,
-                    },
-                    {
-                        icon: <DeleteOutlined color={'error'} />,
-                        name: 'Delete',
-                        color: theme.palette.error.main,
-                        onClick: handleDeleteClick,
                     },
                 ]}
             />
