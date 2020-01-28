@@ -12,8 +12,15 @@ const useStyles = makeStyles((theme: Theme) =>
         spacing: {
             padding: theme.spacing(1),
         },
-        pointer: {
+        dragArea: {
             cursor: 'move',
+            borderWidth: 1,
+            borderStyle: 'solid',
+            borderColor: theme.palette.grey.A100,
+            borderLeftWidth: 0,
+            borderTopWidth: 0,
+            borderBottomRightRadius: theme.shape.borderRadius,
+            padding: theme.spacing(0.2, 1, 0.2, 1),
         },
         container: {
             width: '100%',
@@ -99,8 +106,10 @@ export const FormElement: React.FC<Props> = (props: Props) => {
         <Paper className={classes.container} style={{ width: '100%', opacity }} ref={ref} elevation={0}>
             <Grid container direction={'column'}>
                 <Grid item container direction={'row'} justify={'space-between'}>
-                    <Grid item className={classes.pointer}>
-                        <DragHandleOutlined color={'action'} />
+                    <Grid item>
+                        <div className={classes.dragArea}>
+                            <DragHandleOutlined color={'action'} />
+                        </div>
                     </Grid>
                     <Grid item className={classes.spacing}>
                         <Typography color={'secondary'} variant={'overline'}>
