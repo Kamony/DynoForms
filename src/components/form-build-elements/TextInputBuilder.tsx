@@ -1,9 +1,10 @@
 import React from 'react';
 import { FormElement } from '../../containers/form-element/FormElement';
 import { EditOutlined } from '@material-ui/icons';
-import { InputFields, TextInput, TextInputEditDialog } from '../form-fields/input';
+import { InputAttributes, TextInput, InputEdit } from '../form-fields/input';
 import { useDialog } from '../../hooks/useDialog';
 import { useTheme } from '@material-ui/core';
+import { useStore } from '../../store';
 
 type Props = {
     id: string;
@@ -11,16 +12,16 @@ type Props = {
 };
 
 export const TextInputBuilder: React.FC<Props> = (props: Props) => {
-    const [textElement, setTextElement] = React.useState<InputFields>({
-        label: 'default label',
-        placeholder: 'default placeholder',
-        required: false,
-    });
+    const [elements] = useStore(s => s.elements);
+    // const [textElement, setTextElement] = React.useState<InputAttributes>(textInputInitialValues);
     const { open, handleOpen, handleClose } = useDialog(false);
     const theme = useTheme();
 
-    const handleSaveClick = (payload: InputFields) => {
-        setTextElement(payload);
+    const element = elements.find(el => el.id === props.id);
+    const attributes = element ? element.attributes : {};
+
+    const handleSaveClick = (payload: InputAttributes) => {
+        // setTextElement(payload);
         handleClose();
     };
 
@@ -30,7 +31,7 @@ export const TextInputBuilder: React.FC<Props> = (props: Props) => {
                 id={props.id}
                 index={props.index}
                 title={'Input field'}
-                element={<TextInput {...textElement} />}
+                element={<TextInput {...attributes} />}
                 actions={[
                     {
                         icon: <EditOutlined color={'action'} />,
@@ -40,7 +41,7 @@ export const TextInputBuilder: React.FC<Props> = (props: Props) => {
                     },
                 ]}
             />
-            <TextInputEditDialog open={open} onSave={handleSaveClick} onClose={handleClose} />
+            <InputEdit open={open} onClose={handleClose} element={element!} />
         </div>
     );
 };

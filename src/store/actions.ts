@@ -1,6 +1,7 @@
 import { ElementType, IState } from './store';
 import { StoreActions } from 'react-simple-hook-store';
 import { uuid } from '../utils/uuid';
+import { FormikValues } from 'formik';
 
 export type IActions = {
     addFormElement: (element: ElementType) => void;
@@ -8,6 +9,7 @@ export type IActions = {
     removeFormElement: (id: string) => void;
     copyFormElement: (id: string) => void;
     swapFormElements: (elementIndex: number, newPositionIndex: number) => void;
+    setFormElementAttributes: (id: string, attrs: FormikValues) => void;
 };
 
 export const actions: StoreActions<IState, IActions> = {
@@ -42,6 +44,22 @@ export const actions: StoreActions<IState, IActions> = {
     swapFormElements: (store, oldIndex, newIndex) => {
         const elements = [...store.state.elements];
         elements[oldIndex] = elements.splice(newIndex, 1, elements[oldIndex])[0];
+        store.setState({
+            elements: elements,
+        });
+    },
+    setFormElementAttributes: (store, id, attrs) => {
+        const elements = [...store.state.elements];
+        const element = elements.find(el => el.id === id);
+        const elementId = elements.findIndex(el => el.id === id);
+        if (!element) {
+            return null;
+        }
+        const updatedElement = {
+            ...element,
+            attributes: { ...attrs },
+        };
+        elements.splice(elementId, 1, updatedElement);
         store.setState({
             elements: elements,
         });

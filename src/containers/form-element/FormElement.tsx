@@ -96,7 +96,7 @@ export const FormElement: React.FC<Props> = (props: Props) => {
     drag(drop(ref));
 
     return (
-        <Paper className={classes.container} style={{ opacity }} ref={ref} elevation={0}>
+        <Paper className={classes.container} style={{ width: '100%', opacity }} ref={ref} elevation={0}>
             <Grid container direction={'column'}>
                 <Grid item container direction={'row'} justify={'space-between'}>
                     <Grid item className={classes.pointer}>
