@@ -1,10 +1,11 @@
 import React from 'react';
 import { FormElement } from '../../containers/form-element/FormElement';
-import { EditOutlined } from '@material-ui/icons';
-import { InputAttributes, TextInput, InputEdit } from '../form-fields/input';
+import { EditOutlined, TuneOutlined } from '@material-ui/icons';
+import { TextInput, InputAttributesEdit } from '../form-fields/input';
 import { useDialog } from '../../hooks/useDialog';
 import { useTheme } from '@material-ui/core';
 import { useStore } from '../../store';
+import { InputValidationsEdit } from '../form-fields/input/InputValidationsEdit';
 
 type Props = {
     id: string;
@@ -12,17 +13,23 @@ type Props = {
 };
 
 export const TextInputBuilder: React.FC<Props> = (props: Props) => {
-    const [elements] = useStore(s => s.elements);
-    // const [textElement, setTextElement] = React.useState<InputAttributes>(textInputInitialValues);
+    const [elements, setAttr] = useStore(s => s.elements, a => a.setFormElementValue);
     const { open, handleOpen, handleClose } = useDialog(false);
+    const { open: openValidations, handleOpen: handleOpenValidations, handleClose: handleCloseValidations } = useDialog(
+        false,
+    );
     const theme = useTheme();
 
     const element = elements.find(el => el.id === props.id);
-    const attributes = element ? element.attributes : {};
 
-    const handleSaveClick = (payload: InputAttributes) => {
-        // setTextElement(payload);
-        handleClose();
+    if (!element) {
+        return null;
+    }
+
+    const attributes = element.attributes;
+
+    const handleBlur = (value: string) => {
+        setAttr(element.id, value);
     };
 
     return (
@@ -31,17 +38,24 @@ export const TextInputBuilder: React.FC<Props> = (props: Props) => {
                 id={props.id}
                 index={props.index}
                 title={'Input field'}
-                element={<TextInput {...attributes} />}
+                element={<TextInput {...attributes} onBlur={handleBlur} errorMessage={element.error} />}
                 actions={[
                     {
+                        icon: <TuneOutlined color={'action'} />,
+                        name: 'Set Validations',
+                        color: theme.palette.grey.A100,
+                        onClick: handleOpenValidations,
+                    },
+                    {
                         icon: <EditOutlined color={'action'} />,
-                        name: 'Edit',
+                        name: 'Edit Attributes',
                         color: theme.palette.grey.A100,
                         onClick: handleOpen,
                     },
                 ]}
             />
-            <InputEdit open={open} onClose={handleClose} element={element!} />
+            <InputAttributesEdit open={open} onClose={handleClose} element={element!} />
+            <InputValidationsEdit open={openValidations} onClose={handleCloseValidations} element={element!} />
         </div>
     );
 };

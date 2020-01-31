@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActionType } from '../../components/SpeedDial';
-import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core';
+import { createStyles, makeStyles, Theme, Tooltip, useTheme } from '@material-ui/core';
 import { DeleteOutlined, FileCopyOutlined } from '@material-ui/icons';
 import { useStore } from '../../store';
 
@@ -69,9 +69,11 @@ export const FormElementToolbox: React.FC<ToolBoxProps> = props => {
     return (
         <div className={classes.container}>
             {actions.map((action, i) => (
-                <div className={classes.actionItem} onClick={action.onClick} title={action.name} key={i}>
-                    {action.icon}
-                </div>
+                <Tooltip title={action.name} key={i}>
+                    <div className={classes.actionItem} onClick={action.onClick}>
+                        {action.icon}
+                    </div>
+                </Tooltip>
             ))}
         </div>
     );

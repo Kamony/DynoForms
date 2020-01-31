@@ -1,11 +1,12 @@
 import React from 'react';
-import { createStyles, Divider, Grid, makeStyles, Paper, Theme, Typography } from '@material-ui/core';
+import { Button, createStyles, Grid, makeStyles, Paper, Theme, Typography } from '@material-ui/core';
 import { ActionType } from '../../components/SpeedDial';
 import { DragHandleOutlined } from '@material-ui/icons';
 import { useDrag, useDrop, XYCoord } from 'react-dnd';
 import { ElementTypes } from '../../types/ElementTypes';
 import { useStore } from '../../store';
 import { FormElementToolbox } from './ActionToolbox';
+import { useForm } from '../../hooks/useForm';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -14,19 +15,21 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         dragArea: {
             cursor: 'move',
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: theme.palette.grey.A100,
-            borderLeftWidth: 0,
-            borderTopWidth: 0,
-            borderBottomRightRadius: theme.shape.borderRadius,
             padding: theme.spacing(0.2, 1, 0.2, 1),
+        },
+        center: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
         },
         container: {
             width: '100%',
             borderWidth: 1,
             borderStyle: 'solid',
             borderColor: theme.palette.grey.A100,
+        },
+        elementContainer: {
+            padding: theme.spacing(0, 2, 1, 2),
         },
     }),
 );
@@ -48,7 +51,7 @@ type DragItem = {
 export const FormElement: React.FC<Props> = (props: Props) => {
     const classes = useStyles();
     const [, moveElement] = useStore(s => s.elements, a => a.swapFormElements);
-
+    const { validateFormElement } = useForm();
     const ref = React.useRef<HTMLDivElement>(null);
 
     const [, drop] = useDrop({
@@ -59,35 +62,20 @@ export const FormElement: React.FC<Props> = (props: Props) => {
             }
             const dragIndex = item.index;
             const hoverIndex = props.index;
-            // Don't replace items with themselves
             if (dragIndex === hoverIndex) {
                 return;
             }
-            // Determine rectangle on screen
             const hoverBoundingRect = ref.current.getBoundingClientRect();
-            // Get vertical middle
             const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-            // Determine mouse position
             const clientOffset = monitor.getClientOffset();
-            // Get pixels to the top
             const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-            // Only perform the move when the mouse has crossed half of the items height
-            // When dragging downwards, only move when the cursor is below 50%
-            // When dragging upwards, only move when the cursor is above 50%
-            // Dragging downwards
             if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
                 return;
             }
-            // Dragging upwards
             if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
                 return;
             }
-            // Time to actually perform the action
             moveElement(dragIndex, hoverIndex);
-            // Note: we're mutating the monitor item here!
-            // Generally it's better to avoid mutations,
-            // but it's good here for the sake of performance
-            // to avoid expensive index searches.
             item.index = hoverIndex;
         },
     });
@@ -102,13 +90,17 @@ export const FormElement: React.FC<Props> = (props: Props) => {
     const opacity = isDragging ? 0 : 1;
     drag(drop(ref));
 
+    const handleValidation = () => {
+        validateFormElement(props.id);
+    };
+
     return (
         <Paper className={classes.container} style={{ width: '100%', opacity }} ref={ref} elevation={0}>
             <Grid container direction={'column'}>
                 <Grid item container direction={'row'} justify={'space-between'}>
                     <Grid item>
                         <div className={classes.dragArea}>
-                            <DragHandleOutlined color={'action'} />
+                            <DragHandleOutlined color={'action'} className={classes.center} />
                         </div>
                     </Grid>
                     <Grid item className={classes.spacing}>
@@ -120,8 +112,15 @@ export const FormElement: React.FC<Props> = (props: Props) => {
                         <FormElementToolbox formElementId={props.id} actions={props.actions} />
                     </Grid>
                 </Grid>
-                <Grid item className={classes.spacing}>
-                    {props.element}
+                <Grid item container direction={'row'} alignItems={'center'} spacing={1}>
+                    <Grid item xs={10}>
+                        <div className={classes.elementContainer}>{props.element}</div>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Button onClick={handleValidation} size={'small'} variant={'outlined'}>
+                            validate
+                        </Button>
+                    </Grid>
                 </Grid>
             </Grid>
         </Paper>
