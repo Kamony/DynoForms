@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, createStyles, Grid, makeStyles, Paper, Theme, Typography } from '@material-ui/core';
+import { createStyles, Grid, makeStyles, Paper, Theme, Typography } from '@material-ui/core';
 import { ActionType } from '../../components/SpeedDial';
 import { DragHandleOutlined } from '@material-ui/icons';
 import { useDrag, useDrop, XYCoord } from 'react-dnd';
 import { ElementTypes } from '../../types/ElementTypes';
 import { useStore } from '../../store';
 import { FormElementToolbox } from './ActionToolbox';
-import { useForm } from '../../hooks/useForm';
+import { ValidateActions } from './ValidateActions';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -51,7 +51,7 @@ type DragItem = {
 export const FormElement: React.FC<Props> = (props: Props) => {
     const classes = useStyles();
     const [, moveElement] = useStore(s => s.elements, a => a.swapFormElements);
-    const { validateFormElement } = useForm();
+
     const ref = React.useRef<HTMLDivElement>(null);
 
     const [, drop] = useDrop({
@@ -90,10 +90,6 @@ export const FormElement: React.FC<Props> = (props: Props) => {
     const opacity = isDragging ? 0 : 1;
     drag(drop(ref));
 
-    const handleValidation = () => {
-        validateFormElement(props.id);
-    };
-
     return (
         <Paper className={classes.container} style={{ width: '100%', opacity }} ref={ref} elevation={0}>
             <Grid container direction={'column'}>
@@ -113,13 +109,11 @@ export const FormElement: React.FC<Props> = (props: Props) => {
                     </Grid>
                 </Grid>
                 <Grid item container direction={'row'} alignItems={'center'} spacing={1}>
-                    <Grid item xs={10}>
+                    <Grid item xs={9}>
                         <div className={classes.elementContainer}>{props.element}</div>
                     </Grid>
-                    <Grid item xs={2}>
-                        <Button onClick={handleValidation} size={'small'} variant={'outlined'}>
-                            validate
-                        </Button>
+                    <Grid item xs={3}>
+                        <ValidateActions id={props.id} />
                     </Grid>
                 </Grid>
             </Grid>

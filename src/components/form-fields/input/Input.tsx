@@ -2,25 +2,16 @@ import React from 'react';
 import TextField, { TextFieldProps } from '@material-ui/core/TextField';
 
 export type InputAttributes = TextFieldProps & {
-    label: string;
-    placeholder: string;
-    type: string;
     errorMessage?: string;
-    onBlur?: (value: string) => {};
 };
 
-export const TextInput: React.FC<InputAttributes> = ({ errorMessage, ...props }: InputAttributes) => {
-    const handleOnBlur = (event: any) => {
-        if (props.onBlur) {
-            props.onBlur(event.target.value);
-        }
-    };
+export const TextInput = ({ errorMessage, ...props }: InputAttributes) => {
     return (
         <TextField
             {...props}
             fullWidth={true}
             margin="none"
-            onBlur={handleOnBlur}
+            variant={'standard'}
             error={!!errorMessage}
             helperText={errorMessage || props.helperText}
         />

@@ -2,6 +2,7 @@ import React from 'react';
 import { FormInput } from '../form-fields/input';
 import { Grid } from '@material-ui/core';
 import { FormCheckBox } from '../form-fields/checkbox/FormCheckbox';
+import { formItemAttributes } from './common';
 
 type Props = {
     disabledParam: boolean;
@@ -9,7 +10,7 @@ type Props = {
 
 export const Required: React.FC<Props> = (props: Props) => {
     return (
-        <Grid direction={'row'} container spacing={2} style={{ paddingBottom: 10 }}>
+        <Grid {...formItemAttributes}>
             <Grid item xs={6}>
                 <FormCheckBox name={'required'} label={'required'} size={'small'} />
             </Grid>
@@ -20,6 +21,7 @@ export const Required: React.FC<Props> = (props: Props) => {
                     variant={'outlined'}
                     label={'error message'}
                     disabled={props.disabledParam}
+                    margin={'dense'}
                 />
             </Grid>
         </Grid>

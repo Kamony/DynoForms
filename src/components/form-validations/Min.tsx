@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormInput } from '../form-fields/input';
 import { Grid } from '@material-ui/core';
+import { formItemAttributes, inputCommonAttributes } from './common';
 
 type Props = {
     disabledParam: boolean;
@@ -9,15 +10,15 @@ type Props = {
 export const Min: React.FC<Props> = (props: Props) => {
     return (
         <>
-            <Grid direction={'row'} container spacing={2} style={{ paddingBottom: 10 }}>
+            <Grid {...formItemAttributes}>
                 <Grid item xs={6}>
-                    <FormInput name={'min'} type={'number'} variant={'outlined'} label={'min length'} />
+                    <FormInput {...inputCommonAttributes} name={'min'} type={'number'} label={'min length'} />
                 </Grid>
                 <Grid item xs={6}>
                     <FormInput
+                        {...inputCommonAttributes}
                         name={'minParam'}
                         type={'text'}
-                        variant={'outlined'}
                         label={'error message'}
                         disabled={props.disabledParam}
                     />

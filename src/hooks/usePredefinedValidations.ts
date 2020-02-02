@@ -1,4 +1,5 @@
 import { ElementTypes } from '../types/ElementTypes';
+import { FormikValues } from 'formik';
 
 export type ValidationType = 'string' | 'number';
 
@@ -9,13 +10,14 @@ export type Validation = {
     params: any[];
 };
 
-const stringValidations: any = { required: true, requiredParams: 'field is required' };
+const commonValidations = { required: true, requiredParams: 'field is required' };
+const stringValidations = { ...commonValidations };
 
 export const usePredefinedValidations = () => {
-    const attributes: Record<ElementTypes, Validation[]> = {
+    const attributes: Record<ElementTypes, FormikValues> = {
         [ElementTypes.INPUT]: stringValidations,
-        [ElementTypes.BUTTON]: {} as Validation[],
-        [ElementTypes.FORMELEMENT]: {} as Validation[],
+        [ElementTypes.BUTTON]: {},
+        [ElementTypes.FORMELEMENT]: {},
     };
 
     const getValidationsForType = (type: ElementTypes) => {

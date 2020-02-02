@@ -45,7 +45,14 @@ export const useForm = () => {
         actions.setFormElementAttribute(id, 'error', isValid ? undefined : errors);
     };
 
-    //todo: validate whole form - for review
+    const resetValidations = (id: string) => {
+        actions.setFormElementAttribute(id, 'error', undefined);
+    };
 
-    return { handlePreviewSubmit, createFormElement, validateFormElement };
+    const isElementValidated = (id: string) => {
+        const element = elements.find(el => el.id === id);
+        return !element || element.error;
+    };
+
+    return { handlePreviewSubmit, createFormElement, validateFormElement, resetValidations, isElementValidated };
 };

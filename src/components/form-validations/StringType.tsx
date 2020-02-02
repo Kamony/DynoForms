@@ -2,6 +2,7 @@ import React from 'react';
 import { FormLabel, Grid } from '@material-ui/core';
 import { FormRadioGroup } from '../form-fields/radios/FormRadioGroup';
 import { FormInput } from '../form-fields/input';
+import { formItemAttributes } from './common';
 
 type Props = {
     disabledParam: boolean;
@@ -11,7 +12,7 @@ export const StringType: React.FC<Props> = (props: Props) => {
     return (
         <>
             <FormLabel component={'legend'}>Is type of</FormLabel>
-            <Grid direction={'row'} container spacing={2} style={{ paddingBottom: 10 }}>
+            <Grid {...formItemAttributes}>
                 <Grid item xs={6}>
                     <FormRadioGroup name={'type'} options={['text', 'url', 'email']} row />
                 </Grid>
@@ -22,6 +23,10 @@ export const StringType: React.FC<Props> = (props: Props) => {
                         variant={'outlined'}
                         label={'error message'}
                         disabled={props.disabledParam}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        margin={'dense'}
                     />
                 </Grid>
             </Grid>

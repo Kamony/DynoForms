@@ -28,8 +28,8 @@ export const TextInputBuilder: React.FC<Props> = (props: Props) => {
 
     const attributes = element.attributes;
 
-    const handleBlur = (value: string) => {
-        setAttr(element.id, value);
+    const handleBlur = (event: any) => {
+        setAttr(element.id, event.target.value);
     };
 
     return (

@@ -13,6 +13,7 @@ export type IActions = {
     setFormElementValidations: (id: string, validations: FormikValues) => void;
     setFormElementValue: (id: string, value: any) => void;
     setFormElementAttribute: <T extends keyof ElementType>(id: string, attribute: T, value: ElementType[T]) => void;
+    resetValidations: (id: string) => void;
 };
 
 export const actions: StoreActions<IState, IActions> = {
@@ -114,5 +115,12 @@ export const actions: StoreActions<IState, IActions> = {
         store.setState({
             elements: elements,
         });
+    },
+    resetValidations: (store, id) => {
+        const element = store.state.elements.find(el => el.id === id);
+        if (!element || !element.error) {
+            return null;
+        }
+        actions.setFormElementAttribute(store, id, 'error', '');
     },
 };
