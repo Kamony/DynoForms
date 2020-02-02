@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormLabel } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 import { Formik, FormikValues } from 'formik';
 import { ElementType, useStore } from '../../../store';
 import { FormInput } from './FormInput';
 import { FormSelect } from '../select/FormSelect';
-import { Divider } from '../../Divider';
 
 type ActionProps = {
     open: boolean;
@@ -22,7 +21,7 @@ export const InputAttributesEdit: React.FC<ActionProps> = (props: ActionProps) =
     };
     return (
         <Dialog open={props.open} onClose={props.onClose} aria-labelledby="edit-inputField-dialog">
-            <DialogTitle id="form-dialog-title">Edit input field</DialogTitle>
+            <DialogTitle id="form-dialog-title">Input field attributes</DialogTitle>
             <Formik initialValues={props.element.attributes} onSubmit={handleSave}>
                 {formProps => (
                     <form onSubmit={formProps.handleSubmit} noValidate>
@@ -31,8 +30,6 @@ export const InputAttributesEdit: React.FC<ActionProps> = (props: ActionProps) =
                             style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}
                         >
                             <div style={{ display: 'flex', flexDirection: 'column', padding: 10 }}>
-                                <FormLabel component={'legend'}>Attributes</FormLabel>
-                                <Divider spacing={10} />
                                 <FormInput
                                     name={'label'}
                                     variant={'outlined'}
@@ -51,6 +48,12 @@ export const InputAttributesEdit: React.FC<ActionProps> = (props: ActionProps) =
                                     variant={'outlined'}
                                     value={props.element.attributes.type}
                                     options={['text', 'password', 'email']}
+                                />
+                                <FormInput
+                                    name={'helperText'}
+                                    label={'helper text'}
+                                    variant={'outlined'}
+                                    value={props.element.attributes.helperText}
                                 />
                             </div>
                         </DialogContent>

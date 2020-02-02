@@ -1,8 +1,10 @@
 import React from 'react';
 import { FormInput } from '../form-fields/input';
-import { FormLabel, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
-type Props = {};
+type Props = {
+    disabledParam: boolean;
+};
 
 export const Max: React.FC<Props> = (props: Props) => {
     return (
@@ -12,14 +14,20 @@ export const Max: React.FC<Props> = (props: Props) => {
                     <FormInput name={'max'} type={'number'} variant={'outlined'} label={'max length'} />
                 </Grid>
                 <Grid item xs={6}>
-                    <FormInput name={'maxParam'} type={'text'} variant={'outlined'} label={'error message'} />
+                    <FormInput
+                        name={'maxParam'}
+                        type={'text'}
+                        variant={'outlined'}
+                        label={'error message'}
+                        disabled={props.disabledParam}
+                    />
                 </Grid>
             </Grid>
         </>
     );
 };
 
-export const MaxInitialValues = (max?: number, param?: string) => ({
-    max: max || '',
-    maxParam: param || 'Too long',
-});
+export const MaxInitialValues = {
+    max: '',
+    maxParam: 'too long',
+};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormLabel } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider } from '@material-ui/core';
 import { Formik, FormikValues } from 'formik';
 import { ElementType, useStore } from '../../../store';
 import { Max, MaxInitialValues } from '../../form-validations/Max';
@@ -16,37 +16,50 @@ type ActionProps = {
 
 export const InputValidationsEdit: React.FC<ActionProps> = (props: ActionProps) => {
     const [, setValidations] = useStore(s => s, a => a.setFormElementValidations);
+
+    const getDefaultValues = () => {
+        const validations: Validation[] = props.element.validations;
+        if (!validations) {
+            return {};
+        }
+        // const defaultValues = validations.map(validation => {
+        //     let defaultValue;
+        //     const param =
+        //         validation.params.length === 0
+        //             ? ''
+        //             : validation.params.length > 1
+        //             ? validation.params.pop()
+        //             : validation.params[0];
+        //     if (validation.type === 'required') {
+        //         defaultValue = {
+        //             [validation.type]: true,
+        //             [`${validation.type}Param`]: param,
+        //         };
+        //         return defaultValue;
+        //     }
+        //     if (validation.type === 'email' || validation.type === 'url') {
+        //         defaultValue = {
+        //             type: validation.type,
+        //             [`${validation.type}Param`]: param,
+        //         };
+        //         return defaultValue;
+        //     }
+        //     return {
+        //         [validation.type]: validation.params[0],
+        //         [`${validation.type}Param`]: param,
+        //     };
+        // });
+        // console.log('default values: ', defaultValues);
+        // return defaultValues;
+    };
+
     const handleSave = (values: FormikValues) => {
         //todo: refactor
         console.log('values: ', values);
-        let validations: Validation[] = [];
-        Object.entries(values).forEach(([key, value]: [any, any]) => {
-            if (!value) {
-                return;
-            }
-            if (!key.includes('Param')) {
-                let validation: Validation;
-                if (key === 'type') {
-                    validation = {
-                        type: values[key],
-                        params: [values[`${key}Param`]],
-                    };
-                } else {
-                    validation = {
-                        type: key,
-                        params: [values[`${key}Param`]],
-                    };
-                    if (value && typeof value !== 'boolean') {
-                        validation.params.unshift(value);
-                    }
-                }
 
-                if (!(typeof value === 'boolean' && !value)) {
-                    validations.push(validation);
-                }
-            }
-        });
-        setValidations(props.element.id, validations);
+        //todo: refactor to map arguments on schema creation
+
+        setValidations(props.element.id, values);
         props.onClose();
     };
     return (
@@ -54,11 +67,11 @@ export const InputValidationsEdit: React.FC<ActionProps> = (props: ActionProps) 
             <DialogTitle id="form-dialog-title">Validations</DialogTitle>
             <Formik
                 initialValues={{
-                    ...MaxInitialValues(),
-                    ...RequiredInitialValues(true),
-                    ...StringTypeInitialValues(),
-                    ...MinInitialValues(),
-                    type: 'text',
+                    ...MaxInitialValues,
+                    ...RequiredInitialValues,
+                    ...StringTypeInitialValues,
+                    ...MinInitialValues,
+                    ...props.element.validations,
                 }}
                 onSubmit={handleSave}
             >
@@ -69,13 +82,13 @@ export const InputValidationsEdit: React.FC<ActionProps> = (props: ActionProps) 
                             style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}
                         >
                             <div style={{ display: 'flex', flexDirection: 'column', padding: 10 }}>
-                                <Required />
+                                <Required disabledParam={!formProps.values.required} />
                                 <Divider style={{ marginTop: 5, marginBottom: 5 }} />
-                                <StringType isErrorMessageDisabled={formProps.values.type === 'text'} />
+                                <StringType disabledParam={formProps.values.type === 'text'} />
                                 <Divider style={{ marginTop: 5, marginBottom: 5 }} />
-                                <Max />
+                                <Max disabledParam={!formProps.values.max} />
                                 <Divider style={{ marginTop: 5, marginBottom: 5 }} />
-                                <Min />
+                                <Min disabledParam={!formProps.values.min} />
                             </div>
                         </DialogContent>
                         <DialogActions>

@@ -9,7 +9,7 @@ export type Validation = {
     params: any[];
 };
 
-const stringValidations: Validation[] = [{ type: 'required', params: ['Field is required'] }];
+const stringValidations: any = { required: true, requiredParams: 'field is required' };
 
 export const usePredefinedValidations = () => {
     const attributes: Record<ElementTypes, Validation[]> = {

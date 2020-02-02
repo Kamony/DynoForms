@@ -9,7 +9,7 @@ type Props = RadioGroupProps & {
 };
 
 export const FormRadioGroup: React.FC<Props> = (props: Props) => {
-    const [field, meta] = useField(props.name);
+    const [field] = useField(props.name);
     return (
         <RadioGroup {...field} {...props}>
             {props.options.map(option => (

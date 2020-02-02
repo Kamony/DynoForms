@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormElement } from '../../containers/form-element/FormElement';
 import { EditOutlined, TuneOutlined } from '@material-ui/icons';
-import { TextInput, InputAttributesEdit } from '../form-fields/input';
+import { InputAttributesEdit, TextInput } from '../form-fields/input';
 import { useDialog } from '../../hooks/useDialog';
 import { useTheme } from '@material-ui/core';
 import { useStore } from '../../store';

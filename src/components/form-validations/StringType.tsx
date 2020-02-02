@@ -4,7 +4,7 @@ import { FormRadioGroup } from '../form-fields/radios/FormRadioGroup';
 import { FormInput } from '../form-fields/input';
 
 type Props = {
-    isErrorMessageDisabled: boolean;
+    disabledParam: boolean;
 };
 
 export const StringType: React.FC<Props> = (props: Props) => {
@@ -21,7 +21,7 @@ export const StringType: React.FC<Props> = (props: Props) => {
                         type={'text'}
                         variant={'outlined'}
                         label={'error message'}
-                        disabled={props.isErrorMessageDisabled}
+                        disabled={props.disabledParam}
                     />
                 </Grid>
             </Grid>
@@ -29,7 +29,7 @@ export const StringType: React.FC<Props> = (props: Props) => {
     );
 };
 
-export const StringTypeInitialValues = (type?: number, param?: string) => ({
-    type: type || 'text',
-    typeParam: param || '',
-});
+export const StringTypeInitialValues = {
+    type: 'text',
+    typeParam: '',
+};

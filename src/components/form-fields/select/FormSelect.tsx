@@ -1,5 +1,5 @@
 import React from 'react';
-import { useField, Field } from 'formik';
+import { useField } from 'formik';
 import { MenuItem, TextField } from '@material-ui/core';
 import { TextFieldProps } from '@material-ui/core/TextField';
 

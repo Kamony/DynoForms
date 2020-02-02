@@ -18,7 +18,12 @@ export const useForm = () => {
         switch (type) {
             case ElementTypes.INPUT: {
                 const id = uuid();
-                actions.addFormElement({ id, type, value: '', validationType: 'string' });
+                actions.addFormElement({
+                    id,
+                    type,
+                    value: '',
+                    validationType: 'string',
+                });
                 actions.setFormElementAttributes(id, getAttributesForType(type));
                 actions.setFormElementValidations(id, getValidationsForType(type));
                 break;

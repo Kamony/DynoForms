@@ -5,6 +5,7 @@ const inputAttributes: InputAttributes = {
     label: 'label',
     placeholder: 'placeholder',
     type: 'text',
+    helperText: 'default helper text',
 };
 
 export const usePredefinedAttributes = () => {

@@ -2,7 +2,6 @@ import { ElementType, IState } from './store';
 import { StoreActions } from 'react-simple-hook-store';
 import { uuid } from '../utils/uuid';
 import { FormikValues } from 'formik';
-import { Validation, ValidationType } from '../hooks/usePredefinedValidations';
 
 export type IActions = {
     addFormElement: (element: ElementType) => void;
@@ -11,7 +10,7 @@ export type IActions = {
     copyFormElement: (id: string) => void;
     swapFormElements: (elementIndex: number, newPositionIndex: number) => void;
     setFormElementAttributes: (id: string, attrs: FormikValues) => void;
-    setFormElementValidations: (id: string, validations: Validation[]) => void;
+    setFormElementValidations: (id: string, validations: FormikValues) => void;
     setFormElementValue: (id: string, value: any) => void;
     setFormElementAttribute: <T extends keyof ElementType>(id: string, attribute: T, value: ElementType[T]) => void;
 };
@@ -77,7 +76,7 @@ export const actions: StoreActions<IState, IActions> = {
         }
         const updatedElement = {
             ...element,
-            validations: [...validations],
+            validations: { ...validations },
         };
         elements.splice(elementId, 1, updatedElement);
         store.setState({

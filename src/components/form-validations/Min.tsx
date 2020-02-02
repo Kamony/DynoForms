@@ -2,7 +2,9 @@ import React from 'react';
 import { FormInput } from '../form-fields/input';
 import { Grid } from '@material-ui/core';
 
-type Props = {};
+type Props = {
+    disabledParam: boolean;
+};
 
 export const Min: React.FC<Props> = (props: Props) => {
     return (
@@ -12,14 +14,20 @@ export const Min: React.FC<Props> = (props: Props) => {
                     <FormInput name={'min'} type={'number'} variant={'outlined'} label={'min length'} />
                 </Grid>
                 <Grid item xs={6}>
-                    <FormInput name={'minParam'} type={'text'} variant={'outlined'} label={'error message'} />
+                    <FormInput
+                        name={'minParam'}
+                        type={'text'}
+                        variant={'outlined'}
+                        label={'error message'}
+                        disabled={props.disabledParam}
+                    />
                 </Grid>
             </Grid>
         </>
     );
 };
 
-export const MinInitialValues = (min?: number, param?: string) => ({
-    min: min || '',
-    minParam: param || 'Too short',
-});
+export const MinInitialValues = {
+    min: '',
+    minParam: 'too short',
+};
