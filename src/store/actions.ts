@@ -77,6 +77,10 @@ export const actions: StoreActions<IState, IActions> = {
         }
         const updatedElement = {
             ...element,
+            attributes: {
+                ...element.attributes,
+                ...{ required: validations.required },
+            },
             validations: { ...validations },
         };
         elements.splice(elementId, 1, updatedElement);

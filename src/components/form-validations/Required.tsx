@@ -2,7 +2,7 @@ import React from 'react';
 import { FormInput } from '../form-fields/input';
 import { Grid } from '@material-ui/core';
 import { FormCheckBox } from '../form-fields/checkbox/FormCheckbox';
-import { formItemAttributes } from './common';
+import { formItemAttributes, inputCommonAttributes } from './common';
 
 type Props = {
     disabledParam: boolean;
@@ -16,12 +16,11 @@ export const Required: React.FC<Props> = (props: Props) => {
             </Grid>
             <Grid item xs={6}>
                 <FormInput
+                    {...inputCommonAttributes}
                     name={'requiredParam'}
                     type={'text'}
-                    variant={'outlined'}
                     label={'error message'}
                     disabled={props.disabledParam}
-                    margin={'dense'}
                 />
             </Grid>
         </Grid>

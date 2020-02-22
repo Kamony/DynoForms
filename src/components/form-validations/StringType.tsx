@@ -1,8 +1,8 @@
 import React from 'react';
-import { FormLabel, Grid } from '@material-ui/core';
-import { FormRadioGroup } from '../form-fields/radios/FormRadioGroup';
+import { Grid } from '@material-ui/core';
 import { FormInput } from '../form-fields/input';
-import { formItemAttributes } from './common';
+import { formItemAttributes, inputCommonAttributes } from './common';
+import { FormSelect } from '../form-fields/select/FormSelect';
 
 type Props = {
     disabledParam: boolean;
@@ -10,27 +10,26 @@ type Props = {
 
 export const StringType: React.FC<Props> = (props: Props) => {
     return (
-        <>
-            <FormLabel component={'legend'}>Is type of</FormLabel>
-            <Grid {...formItemAttributes}>
-                <Grid item xs={6}>
-                    <FormRadioGroup name={'type'} options={['text', 'url', 'email']} row />
-                </Grid>
-                <Grid item xs={6}>
-                    <FormInput
-                        name={'typeParam'}
-                        type={'text'}
-                        variant={'outlined'}
-                        label={'error message'}
-                        disabled={props.disabledParam}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        margin={'dense'}
-                    />
-                </Grid>
+        <Grid {...formItemAttributes}>
+            <Grid item xs={6}>
+                <FormSelect
+                    {...inputCommonAttributes}
+                    name={'type'}
+                    label={'is type of'}
+                    options={['text', 'url', 'email']}
+                    fullWidth
+                />
             </Grid>
-        </>
+            <Grid item xs={6}>
+                <FormInput
+                    {...inputCommonAttributes}
+                    name={'typeParam'}
+                    type={'text'}
+                    label={'error message'}
+                    disabled={props.disabledParam}
+                />
+            </Grid>
+        </Grid>
     );
 };
 

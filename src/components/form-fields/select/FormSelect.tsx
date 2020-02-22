@@ -6,19 +6,19 @@ import { TextFieldProps } from '@material-ui/core/TextField';
 type Props = TextFieldProps & {
     name: string;
     options: string[];
-    value?: string;
+    initialValue?: string;
 };
 
-export const FormSelect: React.FC<Props> = ({ name, ...props }) => {
-    const [field, meta] = useField({ name: name, value: props.value || props.options[0] });
+export const FormSelect: React.FC<Props> = ({ name, options, initialValue, ...props }) => {
+    const [field, meta] = useField({ name: name, value: initialValue || options[0] });
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         field.onChange(event);
     };
 
     return (
-        <TextField select {...props} {...field} error={!!meta.error} onChange={handleChange}>
-            {props.options.map(option => (
+        <TextField {...props} {...field} select error={!!meta.error} onChange={handleChange}>
+            {options.map(option => (
                 <MenuItem value={option} key={option}>
                     {option}
                 </MenuItem>
