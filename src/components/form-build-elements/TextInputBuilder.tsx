@@ -1,10 +1,11 @@
 import React from 'react';
 import { FormElement } from '../../containers/form-element/FormElement';
-import { DeleteOutlined, EditOutlined, FileCopyOutlined } from '@material-ui/icons';
-import { InputFields, TextInput, TextInputEditDialog } from '../form-fields/input';
+import { EditOutlined, TuneOutlined } from '@material-ui/icons';
+import { TextInput } from '../form-fields/input';
 import { useDialog } from '../../hooks/useDialog';
-import { useStore } from '../../store';
 import { useTheme } from '@material-ui/core';
+import { useStore } from '../../store';
+import { ModalWithTabs } from '../../containers/modals/ModalWithTabs';
 
 type Props = {
     id: string;
@@ -12,29 +13,21 @@ type Props = {
 };
 
 export const TextInputBuilder: React.FC<Props> = (props: Props) => {
-    const [textElement, setTextElement] = React.useState<InputFields>({
-        label: 'default label',
-        placeholder: 'default placeholder',
-        required: false,
-    });
-
-    const [, storeActions] = useStore(undefined, a => a);
-
+    const [elements, setAttr] = useStore(s => s.elements, a => a.setFormElementValue);
     const { open, handleOpen, handleClose } = useDialog(false);
+
     const theme = useTheme();
 
-    const handleSaveClick = (payload: InputFields) => {
-        setTextElement(payload);
-        handleClose();
-    };
+    const element = elements.find(el => el.id === props.id);
 
-    const handleDeleteClick = () => {
-        console.log('wanna delete', props.id);
-        storeActions.removeFormElement(props.id);
-    };
+    if (!element) {
+        return null;
+    }
 
-    const handleCopyClick = () => {
-        storeActions.copyFormElement(props.id);
+    const attributes = element.attributes;
+
+    const handleBlur = (event: any) => {
+        setAttr(element.id, event.target.value);
     };
 
     return (
@@ -43,29 +36,17 @@ export const TextInputBuilder: React.FC<Props> = (props: Props) => {
                 id={props.id}
                 index={props.index}
                 title={'Input field'}
-                element={<TextInput {...textElement} />}
+                element={<TextInput {...attributes} onBlur={handleBlur} errorMessage={element.error} />}
                 actions={[
                     {
                         icon: <EditOutlined color={'action'} />,
-                        name: 'Edit',
+                        name: 'Edit Field',
                         color: theme.palette.grey.A100,
                         onClick: handleOpen,
                     },
-                    {
-                        icon: <FileCopyOutlined color={'action'} />,
-                        name: 'Copy',
-                        color: theme.palette.grey.A100,
-                        onClick: handleCopyClick,
-                    },
-                    {
-                        icon: <DeleteOutlined color={'error'} />,
-                        name: 'Delete',
-                        color: theme.palette.error.main,
-                        onClick: handleDeleteClick,
-                    },
                 ]}
             />
-            <TextInputEditDialog open={open} onSave={handleSaveClick} onClose={handleClose} />
+            <ModalWithTabs open={open} onClose={handleClose} element={element} />
         </div>
     );
 };

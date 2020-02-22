@@ -2,12 +2,11 @@ import * as React from 'react';
 
 import { DragObjectWithType, useDrop } from 'react-dnd';
 import { ElementTypes } from '../../types/ElementTypes';
-import { Box, Button, makeStyles, Typography } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
+import { Box, Button, makeStyles, Paper, Typography } from '@material-ui/core';
 import { TextInputBuilder } from '../../components/form-build-elements/TextInputBuilder';
 
 import { useStore } from '../../store';
-import { uuid } from '../../utils/uuid';
+import { useForm } from '../../hooks/useForm';
 
 const RenderFormElement = ({ object, id, index }: { object: DragObjectWithType; id: string; index: number }) => {
     switch (object.type) {
@@ -28,7 +27,7 @@ const useStyles = makeStyles({
     root: {
         background: '#FFFFFF',
         width: 600,
-        minHeight: 400,
+        minHeight: 500,
         padding: 10,
         display: 'flex',
         alignItems: 'center',
@@ -38,13 +37,14 @@ const useStyles = makeStyles({
 });
 
 export const DropArea = () => {
-    const [elements, addElement] = useStore(s => s.elements, a => a.addFormElement);
+    const [elements] = useStore(s => s.elements);
     const classes = useStyles();
+    const { createFormElement } = useForm();
 
     const [, drop] = useDrop({
         accept: [ElementTypes.BUTTON, ElementTypes.INPUT],
-        drop: typeElement => {
-            addElement({ id: uuid(), type: typeElement.type });
+        drop: dropItem => {
+            createFormElement(dropItem.type as ElementTypes);
         },
     });
 
@@ -53,10 +53,11 @@ export const DropArea = () => {
             <Typography variant={'h5'} color={'primary'} gutterBottom>
                 Drop Area
             </Typography>
+
             <Paper ref={drop} className={classes.root}>
-                {elements.map((el, i) => (
-                    <RenderFormElement object={el} id={el.id} key={el.id} index={i} />
-                ))}
+                {elements.map((el, i) => {
+                    return <RenderFormElement object={el} id={el.id} key={el.id} index={i} />;
+                })}
             </Paper>
         </Box>
     );

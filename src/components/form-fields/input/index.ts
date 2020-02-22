@@ -1,6 +1,6 @@
-import { InputFields as Types } from './Input';
+import { InputAttributes as Types } from './Input';
 
 export { TextInput } from './Input';
-export { TextInputEditDialog } from './InputEdit';
+export { FormInput } from './FormInput';
 
-export type InputFields = Types;
+export type InputAttributes = Types;

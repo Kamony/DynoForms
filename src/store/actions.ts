@@ -1,6 +1,7 @@
 import { ElementType, IState } from './store';
 import { StoreActions } from 'react-simple-hook-store';
 import { uuid } from '../utils/uuid';
+import { FormikValues } from 'formik';
 
 export type IActions = {
     addFormElement: (element: ElementType) => void;
@@ -8,6 +9,11 @@ export type IActions = {
     removeFormElement: (id: string) => void;
     copyFormElement: (id: string) => void;
     swapFormElements: (elementIndex: number, newPositionIndex: number) => void;
+    setFormElementAttributes: (id: string, attrs: FormikValues) => void;
+    setFormElementValidations: (id: string, validations: FormikValues) => void;
+    setFormElementValue: (id: string, value: any) => void;
+    setFormElementAttribute: <T extends keyof ElementType>(id: string, attribute: T, value: ElementType[T]) => void;
+    resetValidations: (id: string) => void;
 };
 
 export const actions: StoreActions<IState, IActions> = {
@@ -45,5 +51,80 @@ export const actions: StoreActions<IState, IActions> = {
         store.setState({
             elements: elements,
         });
+    },
+    setFormElementAttributes: (store, id, attrs) => {
+        const elements = [...store.state.elements];
+        const element = elements.find(el => el.id === id);
+        const elementId = elements.findIndex(el => el.id === id);
+        if (!element) {
+            return null;
+        }
+        const updatedElement = {
+            ...element,
+            attributes: { ...attrs },
+        };
+        elements.splice(elementId, 1, updatedElement);
+        store.setState({
+            elements: elements,
+        });
+    },
+    setFormElementValidations: (store, id, validations) => {
+        const elements = [...store.state.elements];
+        const element = elements.find(el => el.id === id);
+        const elementId = elements.findIndex(el => el.id === id);
+        if (!element) {
+            return null;
+        }
+        const updatedElement = {
+            ...element,
+            attributes: {
+                ...element.attributes,
+                ...{ required: validations.required },
+            },
+            validations: { ...validations },
+        };
+        elements.splice(elementId, 1, updatedElement);
+        store.setState({
+            elements: elements,
+        });
+    },
+    setFormElementValue: (store, id, value) => {
+        const elements = [...store.state.elements];
+        const element = elements.find(el => el.id === id);
+        const elementId = elements.findIndex(el => el.id === id);
+        if (!element) {
+            return null;
+        }
+        const updatedElement = {
+            ...element,
+            value: value,
+        };
+        elements.splice(elementId, 1, updatedElement);
+        store.setState({
+            elements: elements,
+        });
+    },
+    setFormElementAttribute: (store, id, attribute, value) => {
+        const elements = [...store.state.elements];
+        const element = elements.find(el => el.id === id);
+        const elementId = elements.findIndex(el => el.id === id);
+        if (!element) {
+            return null;
+        }
+        const updatedElement = {
+            ...element,
+            [attribute]: value,
+        };
+        elements.splice(elementId, 1, updatedElement);
+        store.setState({
+            elements: elements,
+        });
+    },
+    resetValidations: (store, id) => {
+        const element = store.state.elements.find(el => el.id === id);
+        if (!element || !element.error) {
+            return null;
+        }
+        actions.setFormElementAttribute(store, id, 'error', '');
     },
 };

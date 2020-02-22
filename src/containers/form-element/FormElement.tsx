@@ -5,61 +5,34 @@ import { DragHandleOutlined } from '@material-ui/icons';
 import { useDrag, useDrop, XYCoord } from 'react-dnd';
 import { ElementTypes } from '../../types/ElementTypes';
 import { useStore } from '../../store';
+import { FormElementToolbox } from './ActionToolbox';
+import { ValidateActions } from './ValidateActions';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         spacing: {
             padding: theme.spacing(1),
         },
-        pointer: {
+        dragArea: {
             cursor: 'move',
+            padding: theme.spacing(0.2, 1, 0.2, 1),
         },
-    }),
-);
-
-type ToolBoxProps = {
-    actions: ActionType[];
-};
-
-const useToolboxStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        container: {
+        center: {
             display: 'flex',
-            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        container: {
+            width: '100%',
             borderWidth: 1,
             borderStyle: 'solid',
             borderColor: theme.palette.grey.A100,
-            borderBottomLeftRadius: theme.shape.borderRadius,
-            borderTopWidth: 0,
         },
-        actionItem: {
-            padding: theme.spacing(0.2, 1, 0.2, 1),
-            borderRightWidth: 1,
-            borderRightStyle: 'solid',
-            borderRightColor: theme.palette.grey.A100,
-            cursor: 'pointer',
-            '&:last-child': {
-                borderRight: 'none',
-            },
-            '&:hover': {
-                backgroundColor: theme.palette.action.hover,
-            },
+        elementContainer: {
+            padding: theme.spacing(0, 2, 1, 2),
         },
     }),
 );
-
-const FormElementToolbox: React.FC<ToolBoxProps> = props => {
-    const classes = useToolboxStyles();
-    return (
-        <div className={classes.container}>
-            {props.actions.map((action, i) => (
-                <div className={classes.actionItem} onClick={action.onClick} title={action.name} key={i}>
-                    {action.icon}
-                </div>
-            ))}
-        </div>
-    );
-};
 
 type Props = {
     title: string;
@@ -89,35 +62,20 @@ export const FormElement: React.FC<Props> = (props: Props) => {
             }
             const dragIndex = item.index;
             const hoverIndex = props.index;
-            // Don't replace items with themselves
             if (dragIndex === hoverIndex) {
                 return;
             }
-            // Determine rectangle on screen
             const hoverBoundingRect = ref.current.getBoundingClientRect();
-            // Get vertical middle
             const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-            // Determine mouse position
             const clientOffset = monitor.getClientOffset();
-            // Get pixels to the top
             const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-            // Only perform the move when the mouse has crossed half of the items height
-            // When dragging downwards, only move when the cursor is below 50%
-            // When dragging upwards, only move when the cursor is above 50%
-            // Dragging downwards
             if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
                 return;
             }
-            // Dragging upwards
             if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
                 return;
             }
-            // Time to actually perform the action
             moveElement(dragIndex, hoverIndex);
-            // Note: we're mutating the monitor item here!
-            // Generally it's better to avoid mutations,
-            // but it's good here for the sake of performance
-            // to avoid expensive index searches.
             item.index = hoverIndex;
         },
     });
@@ -133,11 +91,13 @@ export const FormElement: React.FC<Props> = (props: Props) => {
     drag(drop(ref));
 
     return (
-        <Paper style={{ width: '100%', opacity }} square ref={ref}>
+        <Paper className={classes.container} style={{ width: '100%', opacity }} ref={ref} elevation={0}>
             <Grid container direction={'column'}>
                 <Grid item container direction={'row'} justify={'space-between'}>
-                    <Grid item className={classes.pointer}>
-                        <DragHandleOutlined color={'action'} />
+                    <Grid item>
+                        <div className={classes.dragArea}>
+                            <DragHandleOutlined color={'action'} className={classes.center} />
+                        </div>
                     </Grid>
                     <Grid item className={classes.spacing}>
                         <Typography color={'secondary'} variant={'overline'}>
@@ -145,11 +105,16 @@ export const FormElement: React.FC<Props> = (props: Props) => {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <FormElementToolbox actions={props.actions} />
+                        <FormElementToolbox formElementId={props.id} actions={props.actions} />
                     </Grid>
                 </Grid>
-                <Grid item className={classes.spacing}>
-                    {props.element}
+                <Grid item container direction={'row'} alignItems={'center'} spacing={1}>
+                    <Grid item xs={9}>
+                        <div className={classes.elementContainer}>{props.element}</div>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <ValidateActions id={props.id} />
+                    </Grid>
                 </Grid>
             </Grid>
         </Paper>
