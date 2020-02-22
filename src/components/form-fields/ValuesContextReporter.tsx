@@ -6,7 +6,7 @@ export const ValuesContextReporter = ({ onValueChange }: { onValueChange: (value
 
     React.useEffect(() => {
         if (values) {
-            onValueChange(values);
+            onValueChange(values as FormikValues);
         }
     }, [values]);
 

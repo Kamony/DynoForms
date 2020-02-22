@@ -7,7 +7,7 @@ import { Help } from '@material-ui/icons';
 type Props = {
     type: ElementTypes;
     label: string;
-    icon?: React.ReactNode;
+    icon?: any;
 };
 
 export const DraggableField: React.FC<Props> = (props: Props) => {

@@ -20,7 +20,6 @@ export const ModalWithTabs = (props: Props) => {
 
     return (
         <Dialog open={props.open} onClose={props.onClose} aria-labelledby="edit-inputField-dialog">
-            {/*<Paper square >*/}
             <Tabs
                 value={value}
                 onChange={handleChange}
