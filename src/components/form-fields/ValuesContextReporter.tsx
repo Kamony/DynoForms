@@ -8,7 +8,7 @@ export const ValuesContextReporter = ({ onValueChange }: { onValueChange: (value
         if (values) {
             onValueChange(values as FormikValues);
         }
-    }, [values]);
+    }, [values, onValueChange]);
 
     return null;
 };
