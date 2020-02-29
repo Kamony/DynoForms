@@ -30,21 +30,26 @@ export const AttributesEditField = (props: AttributesEditFieldProps) => {
         a => a.setFormElementAttributes,
     );
     const [attrValues, setAttrValues] = React.useState(props.element.attributes);
+    const [valuesSnapshot, setValuesSnapshot] = React.useState<FormikValues>();
     const classes = useStyles();
 
     const handleSave = (attrValues: FormikValues) => {
         console.log(attrValues);
         setAttrs(props.element.id, attrValues);
+        setValuesSnapshot(attrValues);
     };
 
     const onValueChange = (values: FormikValues) => {
         setAttrValues(values);
     };
 
+    const isValueEditing = () => valuesSnapshot !== attrValues;
+
     return (
         <>
-            <Paper className={classes.previewContainer} color={'grey'}>
+            <Paper className={classes.previewContainer} color={'grey'} variant={'outlined'}>
                 <Typography color={'textPrimary'}>Preview</Typography>
+                {/* TODO: dynamic field preview */}
                 <TextInput
                     {...attrValues}
                     InputLabelProps={{ shrink: true }}
@@ -62,9 +67,17 @@ export const AttributesEditField = (props: AttributesEditFieldProps) => {
                                     {getAttributeEditField(attribute)}
                                 </Grid>
                             ))}
-                            <Button type={'submit'} color="primary">
-                                Save Attributes
-                            </Button>
+                            <Grid item xs={12}>
+                                <Button
+                                    fullWidth={true}
+                                    type={'submit'}
+                                    color="secondary"
+                                    variant={'outlined'}
+                                    disabled={!isValueEditing()}
+                                >
+                                    {isValueEditing() ? 'Apply Attributes' : 'Applied!'}
+                                </Button>
+                            </Grid>
                         </Grid>
                         <ValuesContextReporter onValueChange={onValueChange} />
                     </form>

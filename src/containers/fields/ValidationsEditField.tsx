@@ -4,6 +4,7 @@ import { Button, Grid } from '@material-ui/core';
 import React from 'react';
 import { Validations } from '../../hooks/usePredefinedValidations';
 import { getValidationEditField } from '../../utils/createFieldAttributesEditFields';
+import { ValuesContextReporter } from '../../components/form-fields/ValuesContextReporter';
 
 export type ValidationEditSchema = {
     type: Validations;
@@ -19,10 +20,7 @@ export const ValidationsEditField = (props: AttributesEditFieldProps) => {
         s => s,
         a => a.setFormElementValidations,
     );
-
-    const handleSave = (values: FormikValues) => {
-        setValidations(props.element.id, values);
-    };
+    const [valuesSnapshot, setValuesSnapshot] = React.useState<FormikValues>();
 
     const getInitialValues = React.useCallback(() => {
         return props.validations.reduce((accumulator, validation) => {
@@ -32,6 +30,19 @@ export const ValidationsEditField = (props: AttributesEditFieldProps) => {
             };
         }, {});
     }, [props.validations]);
+
+    const [validationsValues, setValidationsValues] = React.useState({
+        ...getInitialValues(),
+        ...props.element.validations,
+    });
+    const isValueEditing = () => valuesSnapshot !== validationsValues;
+    const onValueChange = (values: FormikValues) => {
+        setValidationsValues(values);
+    };
+    const handleSave = (values: FormikValues) => {
+        setValidations(props.element.id, values);
+        setValuesSnapshot(validationsValues);
+    };
 
     return (
         <Formik initialValues={{ ...getInitialValues(), ...props.element.validations }} onSubmit={handleSave}>
@@ -49,10 +60,19 @@ export const ValidationsEditField = (props: AttributesEditFieldProps) => {
                                 </Grid>
                             );
                         })}
-                        <Button type={'submit'} color="primary">
-                            Save Validations
-                        </Button>
+                        <Grid item xs={12}>
+                            <Button
+                                fullWidth={true}
+                                type={'submit'}
+                                color="secondary"
+                                variant={'outlined'}
+                                disabled={!isValueEditing()}
+                            >
+                                {isValueEditing() ? 'Save Validations' : 'Saved!'}
+                            </Button>
+                        </Grid>
                     </Grid>
+                    <ValuesContextReporter onValueChange={onValueChange} />
                 </form>
             )}
         </Formik>
