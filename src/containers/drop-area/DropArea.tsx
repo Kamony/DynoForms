@@ -26,10 +26,9 @@ const RenderFormElement = ({ object, id, index }: { object: DragObjectWithType; 
 const useStyles = makeStyles({
     root: {
         background: '#FFFFFF',
-        width: 600,
-        minHeight: 500,
         padding: 10,
         display: 'flex',
+        flex: '1 1 0',
         alignItems: 'center',
         justifyContent: 'flex-start',
         flexDirection: 'column',
@@ -49,12 +48,12 @@ export const DropArea = () => {
     });
 
     return (
-        <Box display={'flex'} flexDirection={'column'}>
+        <Box display={'flex'} flexDirection={'column'} style={{ height: '100%', width: '100%' }}>
             <Typography variant={'h5'} color={'primary'} gutterBottom>
                 Drop Area
             </Typography>
 
-            <Paper ref={drop} className={classes.root}>
+            <Paper ref={drop} className={classes.root} variant={'outlined'}>
                 {elements.map((el, i) => {
                     return <RenderFormElement object={el} id={el.id} key={el.id} index={i} />;
                 })}

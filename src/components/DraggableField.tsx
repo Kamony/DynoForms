@@ -8,6 +8,7 @@ type Props = {
     type: ElementTypes;
     label: string;
     icon?: any;
+    onClick?: () => void;
 };
 
 export const DraggableField: React.FC<Props> = (props: Props) => {
@@ -18,7 +19,7 @@ export const DraggableField: React.FC<Props> = (props: Props) => {
         }),
     });
     return (
-        <ListItem ref={drag} style={{ opacity: isDragging ? 0.8 : 1 }}>
+        <ListItem ref={drag} style={{ opacity: isDragging ? 0.8 : 1 }} onClick={props.onClick}>
             <ListItemAvatar>{props.icon ? props.icon : <Help color={'secondary'} />}</ListItemAvatar>
             <ListItemText primary={props.label} />
         </ListItem>
