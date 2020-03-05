@@ -66,6 +66,7 @@ export const AttributesEditField = (props: AttributesEditFieldProps) => {
                                     color="secondary"
                                     variant={'outlined'}
                                     disabled={!isValueEditing()}
+                                    data-cy={'apply-attributes-button'}
                                 >
                                     {isValueEditing() ? 'Apply Attributes' : 'Applied!'}
                                 </Button>

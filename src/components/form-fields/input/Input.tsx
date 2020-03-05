@@ -14,6 +14,8 @@ export const TextInput = ({ errorMessage = undefined, ...props }: InputAttribute
             variant={'standard'}
             error={!!errorMessage}
             helperText={errorMessage || props.helperText}
+            id={'text-field'}
+            inputProps={{ 'data-cy': 'text-field' }}
         />
     );
 };
