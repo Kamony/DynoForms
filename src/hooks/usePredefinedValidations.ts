@@ -30,12 +30,14 @@ export const usePredefinedValidations = () => {
         [ElementTypes.INPUT]: stringValidations,
         [ElementTypes.BUTTON]: {},
         [ElementTypes.FORMELEMENT]: {},
+        [ElementTypes.CUSTOM]: {},
     };
 
     const editValidations: Record<ElementTypes, ValidationEditSchema> = {
         [ElementTypes.INPUT]: stringEditValidations,
         [ElementTypes.BUTTON]: [],
         [ElementTypes.FORMELEMENT]: [],
+        [ElementTypes.CUSTOM]: [],
     };
 
     const getValidationsForType = (type: ElementTypes) => {

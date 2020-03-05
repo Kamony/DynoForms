@@ -5,7 +5,7 @@ export type InputAttributes = TextFieldProps & {
     errorMessage?: string;
 };
 
-export const TextInput = ({ errorMessage, ...props }: InputAttributes) => {
+export const TextInput = ({ errorMessage = undefined, ...props }: InputAttributes) => {
     return (
         <TextField
             {...props}

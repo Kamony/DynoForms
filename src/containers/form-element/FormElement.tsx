@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = {
     title: string;
     element: React.ReactNode;
-    actions: ActionType[];
+    actions?: ActionType[];
     index: number;
     id: string;
 };
@@ -50,7 +50,10 @@ type DragItem = {
 
 export const FormElement: React.FC<Props> = (props: Props) => {
     const classes = useStyles();
-    const [, moveElement] = useStore(s => s.elements, a => a.swapFormElements);
+    const [, moveElement] = useStore(
+        s => s.elements,
+        a => a.swapFormElements,
+    );
 
     const ref = React.useRef<HTMLDivElement>(null);
 

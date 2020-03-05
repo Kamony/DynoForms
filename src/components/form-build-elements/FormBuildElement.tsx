@@ -14,7 +14,7 @@ type Props = {
     index: number;
 };
 
-export const TextInputBuilder: React.FC<Props> = (props: Props) => {
+export const FormBuildElement: React.FC<Props> = (props: Props) => {
     const [elements, setAttr] = useStore(
         s => s.elements,
         a => a.setFormElementValue,
@@ -30,6 +30,7 @@ export const TextInputBuilder: React.FC<Props> = (props: Props) => {
     }
 
     const handleBlur = (event: any) => {
+        console.log('provadim', event.target);
         setAttr(element.id, event.target.value);
     };
 
@@ -38,22 +39,27 @@ export const TextInputBuilder: React.FC<Props> = (props: Props) => {
             <FormElement
                 id={props.id}
                 index={props.index}
-                title={'Input field'}
-                element={<TextInput {...element.attributes} onBlur={handleBlur} errorMessage={element.error} />}
-                actions={[
-                    {
-                        icon: <EditOutlined color={'action'} />,
-                        name: 'Edit Field',
-                        color: theme.palette.grey.A100,
-                        onClick: handleOpen,
-                    },
-                ]}
+                title={element.label}
+                element={
+                    <element.renderElement {...element.attributes} onBlur={handleBlur} errorMessage={element.error} />
+                }
+                actions={
+                    element.editable
+                        ? [
+                              {
+                                  icon: <EditOutlined color={'action'} />,
+                                  name: 'Edit Field',
+                                  color: theme.palette.grey.A100,
+                                  onClick: handleOpen,
+                              },
+                          ]
+                        : undefined
+                }
             />
             <ModalWithTabs
                 open={open}
                 onClose={handleClose}
                 element={element}
-                attributes={getEditSchemaForType(element.type)}
                 validations={getValidationSchemaForType(element.type)}
             />
         </div>

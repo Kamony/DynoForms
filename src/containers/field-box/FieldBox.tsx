@@ -2,9 +2,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Box, Divider, List, Paper, Typography } from '@material-ui/core';
 import { DraggableField } from '../../components/DraggableField';
-import { ElementTypes } from '../../types/ElementTypes';
-import { AddBoxOutlined, TextFields } from '@material-ui/icons';
+import { FormElement } from '../../types/ElementTypes';
 import { useForm } from '../../hooks/useForm';
+import { formElements } from '../../model';
 
 type Props = {
     children?: React.ReactNode;
@@ -20,8 +20,8 @@ export const FieldBox: React.FC<Props> = (props: Props) => {
     const classes = useStyles();
     const { createFormElement } = useForm();
 
-    const handleClick = (type: ElementTypes) => () => {
-        createFormElement(type);
+    const handleClick = (formElement: FormElement) => () => {
+        createFormElement(formElement);
     };
 
     return (
@@ -31,19 +31,9 @@ export const FieldBox: React.FC<Props> = (props: Props) => {
             </Typography>
             <Paper className={classes.container} variant={'outlined'}>
                 <List>
-                    <DraggableField
-                        type={ElementTypes.BUTTON}
-                        label={'Button'}
-                        icon={<AddBoxOutlined color={'secondary'} />}
-                        onClick={handleClick(ElementTypes.BUTTON)}
-                    />
-                    <Divider />
-                    <DraggableField
-                        type={ElementTypes.INPUT}
-                        label={'Input'}
-                        icon={<TextFields color={'secondary'} />}
-                        onClick={handleClick(ElementTypes.INPUT)}
-                    />
+                    {formElements.map((formElement, i) => (
+                        <DraggableField key={i} formElement={formElement} onClick={handleClick(formElement)} />
+                    ))}
                     <Divider />
                     {props.children}
                 </List>

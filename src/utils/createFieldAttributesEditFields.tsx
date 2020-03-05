@@ -7,13 +7,15 @@ import { Max } from '../components/form-validations/Max';
 import { Min } from '../components/form-validations/Min';
 import { Required } from '../components/form-validations/Required';
 import { StringType } from '../components/form-validations/StringType';
+import { OptionsBuilder } from '../components/OptionsBuilder';
 
-type formType = 'input' | 'select';
+type formType = 'input' | 'select' | 'options';
 
 export type Attribute = {
     type: formType;
     name: string;
     label: string;
+    default: string;
     options?: string[];
 };
 
@@ -31,6 +33,7 @@ export const getAttributeEditField = (attribute: Attribute) => {
                 fullWidth={true}
             />
         ),
+        options: <OptionsBuilder />,
     };
 
     return attributesFieldMap[attribute.type];

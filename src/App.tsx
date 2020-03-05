@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, CssBaseline, Grid, Typography } from '@material-ui/core';
+import { Container, CssBaseline, Grid, Typography } from '@material-ui/core';
 import { DropArea } from './containers/drop-area/DropArea';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';

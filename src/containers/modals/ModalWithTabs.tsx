@@ -21,7 +21,6 @@ type Props = {
     open: boolean;
     onClose: () => void;
     element: ElementType;
-    attributes: Attributes;
     validations: ValidationEditSchema;
 };
 
@@ -73,7 +72,7 @@ export const ModalWithTabs = (props: Props) => {
                     <Tab label="Validations" />
                 </Tabs>
                 <TabPanel value={value} index={0}>
-                    <AttributesEditField element={props.element} attributes={props.attributes} />
+                    <AttributesEditField element={props.element} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <ValidationsEditField element={props.element} validations={props.validations} />

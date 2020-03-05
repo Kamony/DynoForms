@@ -4,7 +4,7 @@ import { Button, createStyles, Grid, makeStyles, Paper, Theme, Typography } from
 import { TextInput } from '../../components/form-fields/input';
 import { ValuesContextReporter } from '../../components/form-fields/ValuesContextReporter';
 import React from 'react';
-import { Attributes, getAttributeEditField } from '../../utils/createFieldAttributesEditFields';
+import { Attribute, getAttributeEditField } from '../../utils/createFieldAttributesEditFields';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type AttributesEditFieldProps = {
     element: ElementType;
-    attributes: Attributes;
 };
 export const AttributesEditField = (props: AttributesEditFieldProps) => {
     const [, setAttrs] = useStore(
@@ -49,20 +48,13 @@ export const AttributesEditField = (props: AttributesEditFieldProps) => {
         <>
             <Paper className={classes.previewContainer} color={'grey'} variant={'outlined'}>
                 <Typography color={'textPrimary'}>Preview</Typography>
-                {/* TODO: dynamic field preview */}
-                <TextInput
-                    {...attrValues}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
+                <props.element.renderElement {...attrValues} />
             </Paper>
             <Formik initialValues={props.element.attributes} onSubmit={handleSave}>
                 {formProps => (
                     <form onSubmit={formProps.handleSubmit} noValidate>
                         <Grid item container direction={'column'} spacing={1}>
-                            {props.attributes.map(attribute => (
+                            {props.element.editAttrsSchema!.map((attribute: Attribute) => (
                                 <Grid item key={attribute.name}>
                                     {getAttributeEditField(attribute)}
                                 </Grid>
