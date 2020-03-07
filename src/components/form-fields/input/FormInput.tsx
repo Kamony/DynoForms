@@ -5,9 +5,12 @@ import { TextFieldProps } from '@material-ui/core/TextField';
 
 type Props = TextFieldProps & {
     name: string;
+    cy?: string;
 };
 
-export const FormInput: React.FC<Props> = ({ name, ...props }) => {
+export const FormInput: React.FC<Props> = ({ name, cy, ...props }) => {
     const [field, meta] = useField(name);
-    return <TextField {...props} {...field} error={!!meta.error} helperText={meta.error} />;
+    return (
+        <TextField {...props} {...field} error={!!meta.error} helperText={meta.error} inputProps={{ 'data-cy': cy }} />
+    );
 };

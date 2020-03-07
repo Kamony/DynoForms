@@ -70,7 +70,7 @@ export const FormElementToolbox: React.FC<ToolBoxProps> = props => {
         <div className={classes.container}>
             {actions.map((action, i) => (
                 <Tooltip title={action.name} key={i}>
-                    <div className={classes.actionItem} onClick={action.onClick}>
+                    <div className={classes.actionItem} onClick={action.onClick} data-cy={`action-${action.name}`}>
                         {action.icon}
                     </div>
                 </Tooltip>

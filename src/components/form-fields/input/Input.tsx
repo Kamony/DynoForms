@@ -5,7 +5,7 @@ export type InputAttributes = TextFieldProps & {
     errorMessage?: string;
 };
 
-export const TextInput = ({ errorMessage, ...props }: InputAttributes) => {
+export const TextInput = ({ errorMessage = undefined, ...props }: InputAttributes) => {
     return (
         <TextField
             {...props}
@@ -14,6 +14,8 @@ export const TextInput = ({ errorMessage, ...props }: InputAttributes) => {
             variant={'standard'}
             error={!!errorMessage}
             helperText={errorMessage || props.helperText}
+            id={'text-field'}
+            inputProps={{ 'data-cy': 'text-field' }}
         />
     );
 };

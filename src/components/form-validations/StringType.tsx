@@ -17,7 +17,6 @@ export const StringType: React.FC<Props> = (props: Props) => {
                     name={'type'}
                     label={'is type of'}
                     options={['text', 'url', 'email']}
-                    fullWidth
                 />
             </Grid>
             <Grid item xs={6}>

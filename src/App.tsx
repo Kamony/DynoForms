@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, CssBaseline, Typography } from '@material-ui/core';
+import { Container, CssBaseline, Grid, Typography } from '@material-ui/core';
 import { DropArea } from './containers/drop-area/DropArea';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -13,14 +13,18 @@ const App: React.FC = () => {
         <DndProvider backend={HTML5Backend}>
             <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <Container>
+                <Container maxWidth={'xl'}>
                     <Typography variant={'caption'} color={'secondary'} gutterBottom>
                         DynoForms
                     </Typography>
-                    <Box display="flex" flexDirection={'row'} justifyContent={'space-around'}>
-                        <FieldBox />
-                        <DropArea />
-                    </Box>
+                    <Grid container direction={'row'} spacing={2} justify={'center'}>
+                        <Grid item xs={3}>
+                            <FieldBox />
+                        </Grid>
+                        <Grid item xs={8}>
+                            <DropArea />
+                        </Grid>
+                    </Grid>
                 </Container>
                 <DebugPanel />
             </ThemeProvider>

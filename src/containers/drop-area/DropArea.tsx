@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import { DragObjectWithType, useDrop } from 'react-dnd';
-import { ElementTypes } from '../../types/ElementTypes';
+import { ElementTypes, FormElement } from '../../types/ElementTypes';
 import { Box, Button, makeStyles, Paper, Typography } from '@material-ui/core';
-import { TextInputBuilder } from '../../components/form-build-elements/TextInputBuilder';
+import { FormBuildElement } from '../../components/form-build-elements/FormBuildElement';
 
 import { useStore } from '../../store';
 import { useForm } from '../../hooks/useForm';
@@ -17,7 +17,7 @@ const RenderFormElement = ({ object, id, index }: { object: DragObjectWithType; 
                 </Button>
             );
         case ElementTypes.INPUT:
-            return <TextInputBuilder id={id} index={index} />;
+            return <FormBuildElement id={id} index={index} />;
         default:
             return null;
     }
@@ -25,11 +25,9 @@ const RenderFormElement = ({ object, id, index }: { object: DragObjectWithType; 
 
 const useStyles = makeStyles({
     root: {
-        background: '#FFFFFF',
-        width: 600,
-        minHeight: 500,
         padding: 10,
         display: 'flex',
+        flex: '1 1 0',
         alignItems: 'center',
         justifyContent: 'flex-start',
         flexDirection: 'column',
@@ -44,19 +42,20 @@ export const DropArea = () => {
     const [, drop] = useDrop({
         accept: [ElementTypes.BUTTON, ElementTypes.INPUT],
         drop: dropItem => {
-            createFormElement(dropItem.type as ElementTypes);
+            // console.log('dropItem', dropItem);
+            createFormElement(dropItem as FormElement);
         },
     });
 
     return (
-        <Box display={'flex'} flexDirection={'column'}>
+        <Box display={'flex'} flexDirection={'column'} style={{ height: '100%', width: '100%' }}>
             <Typography variant={'h5'} color={'primary'} gutterBottom>
                 Drop Area
             </Typography>
 
-            <Paper ref={drop} className={classes.root}>
+            <Paper ref={drop} className={classes.root} variant={'outlined'}>
                 {elements.map((el, i) => {
-                    return <RenderFormElement object={el} id={el.id} key={el.id} index={i} />;
+                    return <FormBuildElement id={el.id} index={i} key={i} />;
                 })}
             </Paper>
         </Box>

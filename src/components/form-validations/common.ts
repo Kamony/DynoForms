@@ -7,10 +7,12 @@ export const inputCommonAttributes: TextFieldProps = {
         shrink: true,
     },
     variant: 'outlined',
+    fullWidth: true,
 };
 
 export const formItemAttributes: GridProps = {
     direction: 'row',
     container: true,
-    spacing: 1,
+    spacing: 3,
+    justify: 'center',
 };

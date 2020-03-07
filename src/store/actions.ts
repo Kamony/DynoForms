@@ -17,12 +17,12 @@ export type IActions = {
 };
 
 export const actions: StoreActions<IState, IActions> = {
-    addFormElement: (store, payload: ElementType) => {
+    addFormElement: (store, element) => {
         store.setState({
-            elements: [...store.state.elements, payload],
+            elements: [...store.state.elements, element],
         });
     },
-    addFormElementAtIndex: (store, payload: ElementType, index: number) => {
+    addFormElementAtIndex: (store, payload, index) => {
         const elements = [...store.state.elements];
         elements.splice(index, 0, payload);
         store.setState({
