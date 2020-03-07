@@ -1,12 +1,13 @@
 import React from 'react';
 import { Container, CssBaseline, Grid, Typography } from '@material-ui/core';
-import { DropArea } from './containers/drop-area/DropArea';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { FieldBox } from './containers/field-box/FieldBox';
 import { ThemeProvider } from '@material-ui/styles';
 import { theme } from './theme/theme';
 import { DebugPanel } from './components/DebugPanel';
+import { OptionsBuilder } from './components/OptionsBuilder';
+import { DropArea } from './containers/drop-area/DropArea';
 
 const App: React.FC = () => {
     return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
                         </Grid>
                         <Grid item xs={8}>
                             <DropArea />
+                            {/*<OptionsBuilder onOptions={options => console.log(options)} />*/}
                         </Grid>
                     </Grid>
                 </Container>

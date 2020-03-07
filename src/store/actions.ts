@@ -10,6 +10,7 @@ export type IActions = {
     copyFormElement: (id: string) => void;
     swapFormElements: (elementIndex: number, newPositionIndex: number) => void;
     setFormElementAttributes: (id: string, attrs: FormikValues) => void;
+    setFormElementOptions: (id: string, options: any) => void;
     setFormElementValidations: (id: string, validations: FormikValues) => void;
     setFormElementValue: (id: string, value: any) => void;
     setFormElementAttribute: <T extends keyof ElementType>(id: string, attribute: T, value: ElementType[T]) => void;
@@ -62,6 +63,22 @@ export const actions: StoreActions<IState, IActions> = {
         const updatedElement = {
             ...element,
             attributes: { ...attrs },
+        };
+        elements.splice(elementId, 1, updatedElement);
+        store.setState({
+            elements: elements,
+        });
+    },
+    setFormElementOptions: (store, id, options) => {
+        const elements = [...store.state.elements];
+        const element = elements.find(el => el.id === id);
+        const elementId = elements.findIndex(el => el.id === id);
+        if (!element) {
+            return null;
+        }
+        const updatedElement = {
+            ...element,
+            options: [...options],
         };
         elements.splice(elementId, 1, updatedElement);
         store.setState({

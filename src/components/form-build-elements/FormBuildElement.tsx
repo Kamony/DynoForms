@@ -41,7 +41,12 @@ export const FormBuildElement: React.FC<Props> = (props: Props) => {
                 index={props.index}
                 title={element.label}
                 element={
-                    <element.renderElement {...element.attributes} onBlur={handleBlur} errorMessage={element.error} />
+                    <element.renderElement
+                        {...element.attributes}
+                        {...(element.options ? { options: element.options } : {})}
+                        onBlur={handleBlur}
+                        errorMessage={element.error}
+                    />
                 }
                 actions={
                     element.editable

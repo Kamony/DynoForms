@@ -24,17 +24,19 @@ type AttributesEditFieldProps = {
     element: ElementType;
 };
 export const AttributesEditField = (props: AttributesEditFieldProps) => {
-    const [, setAttrs] = useStore(
+    const [, actions] = useStore(
         s => s,
-        a => a.setFormElementAttributes,
+        a => a,
     );
     const [attrValues, setAttrValues] = React.useState(props.element.attributes);
     const [valuesSnapshot, setValuesSnapshot] = React.useState<FormikValues>();
+    const [options, setOptions] = React.useState([]);
     const classes = useStyles();
 
     const handleSave = (attrValues: FormikValues) => {
         console.log(attrValues);
-        setAttrs(props.element.id, attrValues);
+        actions.setFormElementAttributes(props.element.id, attrValues);
+        actions.setFormElementOptions(props.element.id, options);
         setValuesSnapshot(attrValues);
     };
 
@@ -43,7 +45,6 @@ export const AttributesEditField = (props: AttributesEditFieldProps) => {
     };
 
     const isValueEditing = () => valuesSnapshot !== attrValues;
-
     return (
         <>
             <Paper className={classes.previewContainer} color={'grey'} variant={'outlined'}>
@@ -56,7 +57,16 @@ export const AttributesEditField = (props: AttributesEditFieldProps) => {
                         <Grid item container direction={'column'} spacing={1}>
                             {props.element.editAttrsSchema!.map((attribute: Attribute) => (
                                 <Grid item key={attribute.name}>
-                                    {getAttributeEditField(attribute)}
+                                    {getAttributeEditField(
+                                        attribute,
+                                        attribute.type === 'options'
+                                            ? {
+                                                  onOptions: (options: any) => {
+                                                      setOptions(options);
+                                                  },
+                                              }
+                                            : {},
+                                    )}
                                 </Grid>
                             ))}
                             <Grid item xs={12}>

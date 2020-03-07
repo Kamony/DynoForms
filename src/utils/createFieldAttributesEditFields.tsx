@@ -21,7 +21,7 @@ export type Attribute = {
 
 export type Attributes = Attribute[];
 
-export const getAttributeEditField = (attribute: Attribute) => {
+export const getAttributeEditField = (attribute: Attribute, props?: any) => {
     const attributesFieldMap: Record<formType, React.ReactElement> = {
         input: (
             <FormInput
@@ -30,6 +30,7 @@ export const getAttributeEditField = (attribute: Attribute) => {
                 name={attribute.name}
                 label={attribute.label}
                 cy={`edit-${attribute.name}`}
+                {...props}
             />
         ),
         select: (
@@ -39,9 +40,10 @@ export const getAttributeEditField = (attribute: Attribute) => {
                 label={attribute.label}
                 options={attribute.options!}
                 fullWidth={true}
+                {...props}
             />
         ),
-        options: <OptionsBuilder />,
+        options: <OptionsBuilder {...props} />,
     };
 
     return attributesFieldMap[attribute.type];
