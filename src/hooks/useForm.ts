@@ -39,7 +39,7 @@ export const useForm = () => {
         }, {});
         console.log('after attrs: ', attrs);
         actions.setFormElementAttributes(id, attrs);
-        // actions.setFormElementValidations(id, getValidationsForType(formElement.type));
+        actions.setFormElementValidations(id, getValidationsForType(formElement.type));
         // switch (type) {
         //     case ElementTypes.INPUT: {
         //         const id = uuid();

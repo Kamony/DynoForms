@@ -48,7 +48,7 @@ export const FormBuildElement: React.FC<Props> = (props: Props) => {
                         ? [
                               {
                                   icon: <EditOutlined color={'action'} />,
-                                  name: 'Edit Field',
+                                  name: 'Edit',
                                   color: theme.palette.grey.A100,
                                   onClick: handleOpen,
                               },

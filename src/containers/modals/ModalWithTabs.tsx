@@ -56,7 +56,12 @@ export const ModalWithTabs = (props: Props) => {
             >
                 <DialogTitle disableTypography className={classes.root}>
                     <Typography variant="h6">Edit Form Element</Typography>
-                    <IconButton aria-label="close" onClick={props.onClose} className={classes.closeButton}>
+                    <IconButton
+                        aria-label="close"
+                        onClick={props.onClose}
+                        className={classes.closeButton}
+                        data-cy={'button-close-modal'}
+                    >
                         <CloseIcon />
                     </IconButton>
                 </DialogTitle>

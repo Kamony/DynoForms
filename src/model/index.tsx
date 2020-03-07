@@ -3,7 +3,6 @@ import {
     CheckBoxOutlined as CheckBoxIcon,
     FormatColorTextOutlined as TextInputIcon,
     Looks3Outlined as NumberIcon,
-    TextFields,
 } from '@material-ui/icons';
 import { TextInput } from '../components/form-fields/input';
 import React from 'react';
