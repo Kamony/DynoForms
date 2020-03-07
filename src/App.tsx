@@ -18,10 +18,10 @@ const App: React.FC = () => {
                         DynoForms
                     </Typography>
                     <Grid container direction={'row'} spacing={2} justify={'center'}>
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <FieldBox />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={8}>
                             <DropArea />
                         </Grid>
                     </Grid>
