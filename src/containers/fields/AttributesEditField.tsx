@@ -30,15 +30,9 @@ export const AttributesEditField = (props: AttributesEditFieldProps) => {
         a => a,
     );
     const [attrValues, setAttrValues] = React.useState(props.element.attributes);
-    const [loading, setLoading] = React.useState(false);
     const [valuesSnapshot, setValuesSnapshot] = React.useState<FormikValues>();
     const generateName = useNameGenerator();
     const classes = useStyles();
-
-    const onSubmit = async (attrValues: FormikValues) => {
-        setLoading(true);
-        handleSave(attrValues);
-    };
 
     const handleSave = async (attrValues: FormikValues) => {
         actions.setFormElementAttributes(props.element.id, attrValues);
@@ -47,8 +41,6 @@ export const AttributesEditField = (props: AttributesEditFieldProps) => {
             actions.setFormElementAttribute(props.element.id, 'name', generateName(attrValues.label));
         }
         setValuesSnapshot(attrValues);
-
-        setLoading(false);
     };
 
     const onValueChange = (values: FormikValues) => {
@@ -56,9 +48,10 @@ export const AttributesEditField = (props: AttributesEditFieldProps) => {
     };
 
     const isValueEditing = () => !isEqual(attrValues, valuesSnapshot);
+
     return (
         <>
-            <Formik initialValues={props.element.attributes} onSubmit={onSubmit}>
+            <Formik initialValues={props.element.attributes} onSubmit={handleSave}>
                 {formProps => {
                     return (
                         <form onSubmit={formProps.handleSubmit} noValidate>
@@ -66,7 +59,7 @@ export const AttributesEditField = (props: AttributesEditFieldProps) => {
                                 <Typography color={'textPrimary'}>Preview</Typography>
                                 <props.element.renderElement {...formProps.values} name={'options'} readOnly={true} />
                             </Paper>
-                            <Grid item container direction={'column'} spacing={1}>
+                            <Grid item container direction={'column'} spacing={2}>
                                 {props.element.editAttrsSchema!.map((attribute: Attribute) => (
                                     <Grid item key={attribute.name}>
                                         {getAttributeEditField(attribute)}
@@ -81,7 +74,6 @@ export const AttributesEditField = (props: AttributesEditFieldProps) => {
                                         disabled={!isValueEditing()}
                                         data-cy={'apply-attributes-button'}
                                     >
-                                        {loading && <CircularProgress />}
                                         {isValueEditing() ? 'Apply Attributes' : 'Applied!'}
                                     </Button>
                                 </Grid>

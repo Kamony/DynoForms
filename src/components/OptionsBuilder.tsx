@@ -1,11 +1,22 @@
 import * as React from 'react';
-import { createStyles, Grid, IconButton, Input, makeStyles, Tooltip } from '@material-ui/core';
+import {
+    Box,
+    Button,
+    createStyles,
+    Grid,
+    IconButton,
+    Input,
+    makeStyles,
+    Theme,
+    Tooltip,
+    Typography,
+} from '@material-ui/core';
 import { Clear, DragIndicatorOutlined } from '@material-ui/icons';
 import { CheckBoxField } from './form-fields/checkbox/FormCheckbox';
 import { Field, FieldArray } from 'formik';
 import { DragSortableItem } from './DragSortableItem';
 
-const useStyles = makeStyles(
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
             '&:hover $dragContainer': {
@@ -15,6 +26,27 @@ const useStyles = makeStyles(
         dragContainer: {
             visibility: 'hidden',
             cursor: 'move',
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+            left: theme.spacing(1.5),
+        },
+        wrapper: {
+            borderWidth: 1,
+            borderStyle: 'solid',
+            borderColor: theme.palette.grey.A100,
+            borderRadius: theme.shape.borderRadius,
+            padding: theme.spacing(2),
+        },
+        actionArea: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        actionDivider: {
+            paddingLeft: theme.spacing(1),
+            paddingRight: theme.spacing(1),
         },
     }),
 );
@@ -25,14 +57,15 @@ export const OptionsBuilder = ({ name }: { name: string }) => {
     return (
         <FieldArray name={name}>
             {arrayHelpers => (
-                <Grid container spacing={1} direction={'column'}>
+                <Grid container spacing={1} direction={'column'} className={classes.wrapper}>
+                    <Typography color={'textPrimary'}>Set Options</Typography>
                     {arrayHelpers.form.values[name].map((singleTag: any, index: number) => (
                         <DragSortableItem id={singleTag.label} index={index} swap={arrayHelpers.swap} key={index}>
                             <Grid
                                 item
                                 container
                                 direction={'row'}
-                                alignItems={'baseline'}
+                                alignItems={'center'}
                                 spacing={2}
                                 className={classes.container}
                             >
@@ -72,18 +105,25 @@ export const OptionsBuilder = ({ name }: { name: string }) => {
                             </Grid>
                         </DragSortableItem>
                     ))}
-                    <Grid item container direction={'row'} alignItems={'baseline'} spacing={2}>
-                        <Grid item xs={1} />
-                        <Grid item xs={5}>
-                            <Input
-                                readOnly={true}
-                                fullWidth={true}
-                                defaultValue="Add option"
-                                inputProps={{ 'aria-label': 'add-option' }}
-                                onClick={() => arrayHelpers.push({ value: false, label: '' })}
-                            />
-                        </Grid>
-                    </Grid>
+                    <Box p={2} className={classes.actionArea}>
+                        <Button
+                            color={'primary'}
+                            variant={'outlined'}
+                            onClick={() => arrayHelpers.push({ value: false, label: '' })}
+                        >
+                            Add Option
+                        </Button>
+                        <div className={classes.actionDivider}>
+                            <Typography color={'textSecondary'}>or</Typography>
+                        </div>
+                        <Button
+                            variant={'text'}
+                            size={'small'}
+                            onClick={() => arrayHelpers.push({ value: false, label: 'Other' })}
+                        >
+                            Add 'Other' Option
+                        </Button>
+                    </Box>
                 </Grid>
             )}
         </FieldArray>

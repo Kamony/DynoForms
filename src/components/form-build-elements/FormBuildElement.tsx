@@ -26,7 +26,7 @@ export const FormBuildElement: React.FC<Props> = (props: Props) => {
     }
 
     return (
-        <div style={{ width: '100%', margin: 10 }}>
+        <div style={{ width: '100%', marginBottom: 10 }}>
             <FormElement
                 id={props.id}
                 index={props.index}

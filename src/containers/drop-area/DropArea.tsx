@@ -7,8 +7,7 @@ import { FormBuildElement } from '../../components/form-build-elements/FormBuild
 
 import { useStore } from '../../store';
 import { useForm } from '../../hooks/useForm';
-import { FieldArray, Form, Formik } from 'formik';
-import { FormInput } from '../../components/form-fields/input';
+import { Form, Formik } from 'formik';
 
 const useStyles = makeStyles({
     root: {
@@ -18,6 +17,10 @@ const useStyles = makeStyles({
         alignItems: 'center',
         justifyContent: 'flex-start',
         flexDirection: 'column',
+    },
+    dropArea: {
+        width: '100%',
+        justifyContent: 'center',
     },
 });
 
@@ -34,7 +37,7 @@ export const DropArea = () => {
     });
 
     const getInitialValues = React.useCallback(() => {
-        return elements.reduce((accumulator, element, index) => {
+        return elements.reduce((accumulator, element) => {
             return {
                 ...accumulator,
                 [element.name]: element.initialValue,
@@ -51,22 +54,18 @@ export const DropArea = () => {
             <Paper ref={drop} className={classes.root} variant={'outlined'}>
                 <Formik enableReinitialize={true} initialValues={getInitialValues()} onSubmit={() => {}}>
                     {formikProps => (
-                        <FieldArray name={'elements'}>
-                            {props => (
-                                <Form>
-                                    {elements.map((el, i) => (
-                                        <FormBuildElement
-                                            // @ts-ignore
-                                            attributes={formikProps.values[i]}
-                                            id={el.id}
-                                            index={i}
-                                            key={i}
-                                        />
-                                    ))}
-                                    {console.log(formikProps.values)}
-                                </Form>
-                            )}
-                        </FieldArray>
+                        <Form className={classes.dropArea}>
+                            {elements.map((el, i) => (
+                                <FormBuildElement
+                                    // @ts-ignore
+                                    attributes={formikProps.values[i]}
+                                    id={el.id}
+                                    index={i}
+                                    key={i}
+                                />
+                            ))}
+                            {console.log(formikProps.values)}
+                        </Form>
                     )}
                 </Formik>
             </Paper>
