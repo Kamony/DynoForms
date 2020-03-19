@@ -6,7 +6,7 @@ import { StringTypeInitialValues } from '../components/form-validations/StringTy
 import { MaxInitialValues } from '../components/form-validations/Max';
 import { MinInitialValues } from '../components/form-validations/Min';
 
-export type ValidationType = 'string' | 'number';
+export type ValidationType = 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object' | 'mixed';
 
 export type Validations = 'required' | 'min' | 'max' | 'length' | 'match' | 'email' | 'url' | 'type';
 

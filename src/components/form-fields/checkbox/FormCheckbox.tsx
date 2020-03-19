@@ -10,11 +10,17 @@ type Props = CheckboxProps & {
 };
 
 export const FormCheckBox: React.FC<Props> = ({ name, ...props }) => {
+    return <FormControlLabel control={<CheckBoxField name={name} />} label={props.label} />;
+};
+
+export const CheckBoxField: React.FC<{ name: string }> = ({ name }) => {
     const [field] = useField({ name });
     return (
-        <FormControlLabel
-            control={<Checkbox {...field} checked={field.value!!} value={field.value ? 'checked' : ''} />}
-            label={props.label}
+        <Checkbox
+            {...field}
+            name={field.name || ''}
+            checked={field.value!! || false}
+            value={field.value ? 'checked' : ''}
         />
     );
 };

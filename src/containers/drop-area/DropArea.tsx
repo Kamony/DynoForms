@@ -1,27 +1,14 @@
 import * as React from 'react';
 
-import { DragObjectWithType, useDrop } from 'react-dnd';
+import { useDrop } from 'react-dnd';
 import { ElementTypes, FormElement } from '../../types/ElementTypes';
-import { Box, Button, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Box, makeStyles, Paper, Typography } from '@material-ui/core';
 import { FormBuildElement } from '../../components/form-build-elements/FormBuildElement';
 
 import { useStore } from '../../store';
 import { useForm } from '../../hooks/useForm';
-
-const RenderFormElement = ({ object, id, index }: { object: DragObjectWithType; id: string; index: number }) => {
-    switch (object.type) {
-        case ElementTypes.BUTTON:
-            return (
-                <Button variant={'contained'} color={'primary'} onClick={() => {}} key={id}>
-                    I am a Button
-                </Button>
-            );
-        case ElementTypes.INPUT:
-            return <FormBuildElement id={id} index={index} />;
-        default:
-            return null;
-    }
-};
+import { FieldArray, Form, Formik } from 'formik';
+import { FormInput } from '../../components/form-fields/input';
 
 const useStyles = makeStyles({
     root: {
@@ -42,10 +29,18 @@ export const DropArea = () => {
     const [, drop] = useDrop({
         accept: [ElementTypes.BUTTON, ElementTypes.INPUT],
         drop: dropItem => {
-            // console.log('dropItem', dropItem);
             createFormElement(dropItem as FormElement);
         },
     });
+
+    const getInitialValues = React.useCallback(() => {
+        return elements.reduce((accumulator, element, index) => {
+            return {
+                ...accumulator,
+                [element.name]: element.initialValue,
+            };
+        }, {});
+    }, [elements]);
 
     return (
         <Box display={'flex'} flexDirection={'column'} style={{ height: '100%', width: '100%' }}>
@@ -54,9 +49,26 @@ export const DropArea = () => {
             </Typography>
 
             <Paper ref={drop} className={classes.root} variant={'outlined'}>
-                {elements.map((el, i) => {
-                    return <FormBuildElement id={el.id} index={i} key={i} />;
-                })}
+                <Formik enableReinitialize={true} initialValues={getInitialValues()} onSubmit={() => {}}>
+                    {formikProps => (
+                        <FieldArray name={'elements'}>
+                            {props => (
+                                <Form>
+                                    {elements.map((el, i) => (
+                                        <FormBuildElement
+                                            // @ts-ignore
+                                            attributes={formikProps.values[i]}
+                                            id={el.id}
+                                            index={i}
+                                            key={i}
+                                        />
+                                    ))}
+                                    {console.log(formikProps.values)}
+                                </Form>
+                            )}
+                        </FieldArray>
+                    )}
+                </Formik>
             </Paper>
         </Box>
     );

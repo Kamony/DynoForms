@@ -1,18 +1,17 @@
-import { useStore } from '../store';
-import { ElementTypes, FormElement } from '../types/ElementTypes';
+import { ElementType, useStore } from '../store';
+import { FormElement } from '../types/ElementTypes';
 import { uuid } from '../utils/uuid';
-import { usePredefinedAttributes } from './usePredefinedAttributes';
 import { usePredefinedValidations } from './usePredefinedValidations';
 import { createValidationFieldSchema } from '../utils/createValidationSchema';
+import { useNameGenerator } from './useNameGenerator';
 
 export const useForm = () => {
     const [elements, actions] = useStore(
         s => s.elements,
         a => a,
     );
-    const { getAttributesForType } = usePredefinedAttributes();
     const { getValidationsForType } = usePredefinedValidations();
-
+    const generateName = useNameGenerator();
     const handlePreviewSubmit = () => {
         console.log(elements);
     };
@@ -22,40 +21,34 @@ export const useForm = () => {
         actions.addFormElement({
             id,
             label: formElement.label,
+            name: generateName(formElement.label),
+            initialValue: formElement.initialValue,
             type: formElement.type,
             validationType: formElement.validationType,
             editAttrsSchema: formElement.attributes,
             editable: formElement.editable,
-            value: '',
             renderElement: formElement.renderComponent,
         });
 
-        console.log('attrs: ', formElement.attributes);
         const attrs = formElement.attributes.reduce((accumulator, attrObj) => {
             return {
                 ...accumulator,
-                [attrObj.label]: attrObj.default,
+                [attrObj.name]: attrObj.default,
             };
         }, {});
-        console.log('after attrs: ', attrs);
+
         actions.setFormElementAttributes(id, attrs);
         actions.setFormElementValidations(id, getValidationsForType(formElement.type));
-        // switch (type) {
-        //     case ElementTypes.INPUT: {
-        //         const id = uuid();
-        //         actions.addFormElement({
-        //             id,
-        //             type,
-        //             value: '',
-        //             validationType: 'string',
-        //         });
-        //         actions.setFormElementAttributes(id, getAttributesForType(type));
-        //         actions.setFormElementValidations(id, getValidationsForType(type));
-        //         break;
-        //     }
-        //     default:
-        //         return null;
-        // }
+    };
+
+    const getFormElementInitialValues = (formElement: FormElement | ElementType) => {
+        const initialAttrs = formElement.attributes.reduce((accumulator: any, attrObj: any) => {
+            return {
+                ...accumulator,
+                [attrObj.name]: attrObj.default,
+            };
+        }, {});
+        return initialAttrs;
     };
 
     const validateFormElement = async (id: string) => {
@@ -79,5 +72,12 @@ export const useForm = () => {
         return !element || element.error;
     };
 
-    return { handlePreviewSubmit, createFormElement, validateFormElement, resetValidations, isElementValidated };
+    return {
+        handlePreviewSubmit,
+        createFormElement,
+        validateFormElement,
+        resetValidations,
+        isElementValidated,
+        getFormElementInitialValues,
+    };
 };
