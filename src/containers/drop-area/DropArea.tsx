@@ -1,27 +1,13 @@
 import * as React from 'react';
 
-import { DragObjectWithType, useDrop } from 'react-dnd';
+import { useDrop } from 'react-dnd';
 import { ElementTypes, FormElement } from '../../types/ElementTypes';
-import { Box, Button, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Box, makeStyles, Paper, Typography } from '@material-ui/core';
 import { FormBuildElement } from '../../components/form-build-elements/FormBuildElement';
 
 import { useStore } from '../../store';
 import { useForm } from '../../hooks/useForm';
-
-const RenderFormElement = ({ object, id, index }: { object: DragObjectWithType; id: string; index: number }) => {
-    switch (object.type) {
-        case ElementTypes.BUTTON:
-            return (
-                <Button variant={'contained'} color={'primary'} onClick={() => {}} key={id}>
-                    I am a Button
-                </Button>
-            );
-        case ElementTypes.INPUT:
-            return <FormBuildElement id={id} index={index} />;
-        default:
-            return null;
-    }
-};
+import { Form, Formik } from 'formik';
 
 const useStyles = makeStyles({
     root: {
@@ -32,17 +18,20 @@ const useStyles = makeStyles({
         justifyContent: 'flex-start',
         flexDirection: 'column',
     },
+    dropArea: {
+        width: '100%',
+        justifyContent: 'center',
+    },
 });
 
 export const DropArea = () => {
     const [elements] = useStore(s => s.elements);
     const classes = useStyles();
-    const { createFormElement } = useForm();
+    const { createFormElement, getInitialValues } = useForm();
 
     const [, drop] = useDrop({
         accept: [ElementTypes.BUTTON, ElementTypes.INPUT],
         drop: dropItem => {
-            // console.log('dropItem', dropItem);
             createFormElement(dropItem as FormElement);
         },
     });
@@ -54,9 +43,21 @@ export const DropArea = () => {
             </Typography>
 
             <Paper ref={drop} className={classes.root} variant={'outlined'}>
-                {elements.map((el, i) => {
-                    return <FormBuildElement id={el.id} index={i} key={i} />;
-                })}
+                <Formik enableReinitialize={true} initialValues={getInitialValues()} onSubmit={() => {}}>
+                    {formikProps => (
+                        <Form className={classes.dropArea}>
+                            {elements.map((el, i) => (
+                                <FormBuildElement
+                                    // @ts-ignore
+                                    attributes={formikProps.values[i]}
+                                    id={el.id}
+                                    index={i}
+                                    key={i}
+                                />
+                            ))}
+                        </Form>
+                    )}
+                </Formik>
             </Paper>
         </Box>
     );

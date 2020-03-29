@@ -15,33 +15,26 @@ export type Attribute = {
     type: formType;
     name: string;
     label: string;
-    default: string;
+    default: any;
     options?: string[];
+    isInitial?: boolean;
 };
 
 export type Attributes = Attribute[];
 
 export const getAttributeEditField = (attribute: Attribute) => {
     const attributesFieldMap: Record<formType, React.ReactElement> = {
-        input: (
-            <FormInput
-                {...inputCommonAttributes}
-                fullWidth={true}
-                name={attribute.name}
-                label={attribute.label}
-                cy={`edit-${attribute.name}`}
-            />
-        ),
+        input: <FormInput fullWidth={true} name={attribute.name} label={attribute.label} {...inputCommonAttributes} />,
         select: (
             <FormSelect
-                {...inputCommonAttributes}
                 name={attribute.name}
                 label={attribute.label}
                 options={attribute.options!}
                 fullWidth={true}
+                {...inputCommonAttributes}
             />
         ),
-        options: <OptionsBuilder />,
+        options: <OptionsBuilder name={attribute.name} />,
     };
 
     return attributesFieldMap[attribute.type];

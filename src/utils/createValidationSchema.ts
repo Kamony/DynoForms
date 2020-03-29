@@ -35,7 +35,7 @@ export const getMappedValidations = (values: FormikValues): Validation[] => {
 
 export const createValidationFieldSchema = (values: FormikValues, validationType: ValidationType) => {
     const fieldValidations = getMappedValidations(values);
-    let fieldSchema: any = yup[validationType]();
+    let fieldSchema: any = new yup[validationType]();
     fieldValidations.forEach(validation => {
         const { params, type } = validation;
         if (!fieldSchema[type]) {

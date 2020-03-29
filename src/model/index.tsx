@@ -4,7 +4,7 @@ import {
     FormatColorTextOutlined as TextInputIcon,
     Looks3Outlined as NumberIcon,
 } from '@material-ui/icons';
-import { TextInput } from '../components/form-fields/input';
+import { FormInput } from '../components/form-fields/input';
 import React from 'react';
 import { NumberInput } from '../components/form-fields/number';
 import { CheckBox } from '../components/form-fields/checkbox/Checkbox';
@@ -17,12 +17,12 @@ export const formElements: FormElement[] = [
         validationType: 'string',
         editable: true,
         attributes: [
-            { type: 'input', name: 'label', label: 'label', default: 'text label' },
-            { type: 'input', name: 'placeholder', label: 'placeholder', default: 'text placeholder' },
-            { type: 'input', name: 'helperText', label: 'helperText', default: 'helper text' },
-            { type: 'select', name: 'type', label: 'type', options: ['text', 'password', 'email'], default: 'text' },
+            { name: 'label', type: 'input', label: 'label', default: 'text label' },
+            { name: 'placeholder', type: 'input', label: 'placeholder', default: 'text placeholder' },
+            { name: 'helperText', type: 'input', label: 'helperText', default: 'helper text' },
+            { name: 'type', type: 'select', label: 'type', options: ['text', 'password', 'email'], default: 'text' },
         ],
-        renderComponent: TextInput,
+        renderComponent: FormInput,
     },
     {
         label: 'Number',
@@ -41,12 +41,22 @@ export const formElements: FormElement[] = [
         label: 'Checkbox',
         type: ElementTypes.INPUT,
         icon: <CheckBoxIcon color={'secondary'} />,
-        validationType: 'number',
+        validationType: 'boolean',
         editable: true,
         attributes: [
             { type: 'input', name: 'label', label: 'label', default: 'checkbox label' },
-            { type: 'options', name: 'options', label: 'manage options', default: '' },
-            // { type: 'input', name: 'helperText', label: 'helperText', default: 'helper text' },
+            {
+                type: 'options',
+                name: 'options',
+                label: 'manage options',
+                isInitial: true,
+                default: [
+                    { label: 'Option 1', value: false },
+                    { label: 'Option 2', value: false },
+                    { label: 'Option 3', value: true },
+                ],
+            },
+            { type: 'input', name: 'helperText', label: 'helperText', default: 'helper text' },
         ],
         renderComponent: CheckBox,
     },

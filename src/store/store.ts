@@ -9,7 +9,6 @@ export type ElementType = DragObjectWithType &
         id: string;
         label: string;
         type: ElementTypes;
-        value: any;
         renderElement: any;
         editable: boolean;
         validationType: ValidationType;

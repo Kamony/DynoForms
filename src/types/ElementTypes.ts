@@ -10,10 +10,12 @@ export enum ElementTypes {
 
 export type FormElement = {
     label: string;
+    name?: string;
     icon?: React.ReactElement<any>;
     type: ElementTypes;
     validationType: ValidationType;
     attributes: Attributes;
+    initialValue?: any;
     editable: boolean;
     renderComponent: any;
 };
