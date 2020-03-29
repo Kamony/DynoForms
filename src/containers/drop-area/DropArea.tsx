@@ -27,7 +27,7 @@ const useStyles = makeStyles({
 export const DropArea = () => {
     const [elements] = useStore(s => s.elements);
     const classes = useStyles();
-    const { createFormElement } = useForm();
+    const { createFormElement, getInitialValues } = useForm();
 
     const [, drop] = useDrop({
         accept: [ElementTypes.BUTTON, ElementTypes.INPUT],
@@ -35,15 +35,6 @@ export const DropArea = () => {
             createFormElement(dropItem as FormElement);
         },
     });
-
-    const getInitialValues = React.useCallback(() => {
-        return elements.reduce((accumulator, element) => {
-            return {
-                ...accumulator,
-                [element.name]: element.initialValue,
-            };
-        }, {});
-    }, [elements]);
 
     return (
         <Box display={'flex'} flexDirection={'column'} style={{ height: '100%', width: '100%' }}>
@@ -64,7 +55,6 @@ export const DropArea = () => {
                                     key={i}
                                 />
                             ))}
-                            {console.log(formikProps.values)}
                         </Form>
                     )}
                 </Formik>

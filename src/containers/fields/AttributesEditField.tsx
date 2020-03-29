@@ -1,6 +1,6 @@
 import { ElementType, useStore } from '../../store';
 import { Formik, FormikValues } from 'formik';
-import { Button, CircularProgress, createStyles, Grid, makeStyles, Paper, Theme, Typography } from '@material-ui/core';
+import { Button, createStyles, Grid, makeStyles, Paper, Theme, Typography } from '@material-ui/core';
 import { ValuesContextReporter } from '../../components/form-fields/ValuesContextReporter';
 import React from 'react';
 import { Attribute, getAttributeEditField } from '../../utils/createFieldAttributesEditFields';

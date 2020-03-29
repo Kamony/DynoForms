@@ -4,7 +4,7 @@ import {
     FormatColorTextOutlined as TextInputIcon,
     Looks3Outlined as NumberIcon,
 } from '@material-ui/icons';
-import { FormInput, TextInput } from '../components/form-fields/input';
+import { FormInput } from '../components/form-fields/input';
 import React from 'react';
 import { NumberInput } from '../components/form-fields/number';
 import { CheckBox } from '../components/form-fields/checkbox/Checkbox';
@@ -15,7 +15,6 @@ export const formElements: FormElement[] = [
         icon: <TextInputIcon color={'secondary'} />,
         type: ElementTypes.INPUT,
         validationType: 'string',
-        initialValue: '',
         editable: true,
         attributes: [
             { name: 'label', type: 'input', label: 'label', default: 'text label' },
@@ -30,7 +29,6 @@ export const formElements: FormElement[] = [
         icon: <NumberIcon color={'secondary'} />,
         type: ElementTypes.INPUT,
         validationType: 'number',
-        initialValue: '',
         editable: true,
         attributes: [
             { type: 'input', name: 'label', label: 'label', default: 'number label' },
@@ -45,24 +43,20 @@ export const formElements: FormElement[] = [
         icon: <CheckBoxIcon color={'secondary'} />,
         validationType: 'boolean',
         editable: true,
-        initialValue: [
-            { label: 'Option 1', value: false },
-            { label: 'Option 2', value: false },
-            { label: 'Option 3', value: true },
-        ],
         attributes: [
             { type: 'input', name: 'label', label: 'label', default: 'checkbox label' },
             {
                 type: 'options',
                 name: 'options',
                 label: 'manage options',
+                isInitial: true,
                 default: [
                     { label: 'Option 1', value: false },
                     { label: 'Option 2', value: false },
                     { label: 'Option 3', value: true },
                 ],
             },
-            // { type: 'input', name: 'helperText', label: 'helperText', default: 'helper text' },
+            { type: 'input', name: 'helperText', label: 'helperText', default: 'helper text' },
         ],
         renderComponent: CheckBox,
     },

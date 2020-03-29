@@ -4,6 +4,7 @@ import { uuid } from '../utils/uuid';
 import { usePredefinedValidations } from './usePredefinedValidations';
 import { createValidationFieldSchema } from '../utils/createValidationSchema';
 import { useNameGenerator } from './useNameGenerator';
+import { Attribute } from '../utils/createFieldAttributesEditFields';
 
 export const useForm = () => {
     const [elements, actions] = useStore(
@@ -12,23 +13,15 @@ export const useForm = () => {
     );
     const { getValidationsForType } = usePredefinedValidations();
     const generateName = useNameGenerator();
+
     const handlePreviewSubmit = () => {
         console.log(elements);
     };
 
     const createFormElement = (formElement: FormElement) => {
         const id = uuid();
-        actions.addFormElement({
-            id,
-            label: formElement.label,
-            name: generateName(formElement.label),
-            initialValue: formElement.initialValue,
-            type: formElement.type,
-            validationType: formElement.validationType,
-            editAttrsSchema: formElement.attributes,
-            editable: formElement.editable,
-            renderElement: formElement.renderComponent,
-        });
+
+        const attributeInitial = formElement.attributes.find((attr: Attribute) => attr.isInitial);
 
         const attrs = formElement.attributes.reduce((accumulator, attrObj) => {
             return {
@@ -37,18 +30,28 @@ export const useForm = () => {
             };
         }, {});
 
-        actions.setFormElementAttributes(id, attrs);
-        actions.setFormElementValidations(id, getValidationsForType(formElement.type));
+        actions.addFormElement({
+            id,
+            label: formElement.label,
+            name: generateName(formElement.label),
+            type: formElement.type,
+            validationType: formElement.validationType,
+            editAttrsSchema: formElement.attributes,
+            initialValue: (attributeInitial && attributeInitial.name) || '',
+            editable: formElement.editable,
+            renderElement: formElement.renderComponent,
+            attributes: attrs,
+            validations: getValidationsForType(formElement.type),
+        });
     };
 
-    const getFormElementInitialValues = (formElement: FormElement | ElementType) => {
-        const initialAttrs = formElement.attributes.reduce((accumulator: any, attrObj: any) => {
+    const getInitialValues = () => {
+        return elements.reduce((accumulator, element) => {
             return {
                 ...accumulator,
-                [attrObj.name]: attrObj.default,
+                [element.name]: element.initialValue !== '' ? element.attributes[element.initialValue] : '',
             };
         }, {});
-        return initialAttrs;
     };
 
     const validateFormElement = async (id: string) => {
@@ -78,6 +81,6 @@ export const useForm = () => {
         validateFormElement,
         resetValidations,
         isElementValidated,
-        getFormElementInitialValues,
+        getInitialValues,
     };
 };

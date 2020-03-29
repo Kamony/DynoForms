@@ -17,6 +17,7 @@ export type Attribute = {
     label: string;
     default: any;
     options?: string[];
+    isInitial?: boolean;
 };
 
 export type Attributes = Attribute[];

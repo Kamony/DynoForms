@@ -15,7 +15,7 @@ export type FormElement = {
     type: ElementTypes;
     validationType: ValidationType;
     attributes: Attributes;
-    initialValue: any;
+    initialValue?: any;
     editable: boolean;
     renderComponent: any;
 };

@@ -54,7 +54,6 @@ export const actions: StoreActions<IState, IActions> = {
         });
     },
     setFormElementAttributes: (store, id, attrs) => {
-        console.log('setting element attributes to', attrs);
         const elements = [...store.state.elements];
         const element = elements.find(el => el.id === id);
         const elementId = elements.findIndex(el => el.id === id);

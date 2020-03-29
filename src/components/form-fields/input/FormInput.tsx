@@ -9,7 +9,7 @@ type Props = TextFieldProps & {
 };
 
 export const FormInput: React.FC<Props> = ({ name, cy, ...props }) => {
-    const [field, meta] = useField({ name, value: '' });
+    const [field, meta, helpers] = useField({ name, value: '' });
     return (
         <TextField
             name={field.name || ''}
@@ -19,6 +19,7 @@ export const FormInput: React.FC<Props> = ({ name, cy, ...props }) => {
             margin="none"
             variant={'standard'}
             error={!!meta.error}
+            onFocus={() => helpers.setTouched(true)}
             helperText={meta.error || props.helperText}
             inputProps={{ 'data-cy': 'text-field' }}
             {...props}
