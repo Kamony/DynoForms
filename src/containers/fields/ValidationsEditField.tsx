@@ -1,8 +1,8 @@
-import { ElementType, useStore } from '../../store';
+import React from 'react';
 import { Formik, FormikValues } from 'formik';
 import { Button, Grid } from '@material-ui/core';
-import React from 'react';
-import { Validations } from '../../hooks/usePredefinedValidations';
+import { ElementType, useStore } from '../../store';
+import { Validation, Validations } from '../../hooks/usePredefinedValidations';
 import { getValidationEditField } from '../../utils/createFieldAttributesEditFields';
 import { ValuesContextReporter } from '../../components/form-fields/ValuesContextReporter';
 

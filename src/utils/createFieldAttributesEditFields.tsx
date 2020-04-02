@@ -1,6 +1,6 @@
+import React from 'react';
 import { FormInput } from '../components/form-fields/input';
 import { inputCommonAttributes } from '../components/form-validations/common';
-import React from 'react';
 import { FormSelect } from '../components/form-fields/select/FormSelect';
 import { Validations } from '../hooks/usePredefinedValidations';
 import { Max } from '../components/form-validations/Max';

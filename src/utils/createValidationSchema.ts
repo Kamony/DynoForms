@@ -2,7 +2,11 @@ import * as yup from 'yup';
 import { Validation, ValidationType } from '../hooks/usePredefinedValidations';
 import { FormikValues } from 'formik';
 
-export const getMappedValidations = (values: FormikValues): Validation[] => {
+export const getMappedValidations = (values: FormikValues): Validation[] | undefined => {
+    if (!values) {
+        return undefined;
+    }
+
     let validations: Validation[] = [];
     Object.entries(values).forEach(([key, value]: [any, any]) => {
         if (!value) {
@@ -35,6 +39,9 @@ export const getMappedValidations = (values: FormikValues): Validation[] => {
 
 export const createValidationFieldSchema = (values: FormikValues, validationType: ValidationType) => {
     const fieldValidations = getMappedValidations(values);
+    if (!fieldValidations) {
+        return undefined;
+    }
     let fieldSchema: any = new yup[validationType]();
     fieldValidations.forEach(validation => {
         const { params, type } = validation;
@@ -45,3 +52,5 @@ export const createValidationFieldSchema = (values: FormikValues, validationType
     });
     return fieldSchema;
 };
+
+export const createValidationSchemaFromObject = (validationObject: any) => yup.object().shape(validationObject);

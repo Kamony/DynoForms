@@ -14,7 +14,7 @@ export const FormCheckBox: React.FC<Props> = ({ name, ...props }) => {
 };
 
 export const CheckBoxField: React.FC<{ name: string }> = ({ name }) => {
-    const [field] = useField({ name });
+    const [field, meta] = useField({ name });
     return (
         <Checkbox
             {...field}

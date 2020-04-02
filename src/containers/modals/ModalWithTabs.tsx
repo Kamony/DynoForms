@@ -14,7 +14,6 @@ import { TabPanel } from './TabPanel';
 import { ElementType } from '../../store';
 import { AttributesEditField } from '../fields/AttributesEditField';
 import { ValidationEditSchema, ValidationsEditField } from '../fields/ValidationsEditField';
-import { Attributes } from '../../utils/createFieldAttributesEditFields';
 import CloseIcon from '@material-ui/icons/Close';
 
 type Props = {

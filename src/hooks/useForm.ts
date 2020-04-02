@@ -1,10 +1,11 @@
-import { ElementType, useStore } from '../store';
+import { useStore } from '../store';
 import { FormElement } from '../types/ElementTypes';
 import { uuid } from '../utils/uuid';
 import { usePredefinedValidations } from './usePredefinedValidations';
-import { createValidationFieldSchema } from '../utils/createValidationSchema';
+import { createValidationFieldSchema, createValidationSchemaFromObject } from '../utils/createValidationSchema';
 import { useNameGenerator } from './useNameGenerator';
 import { Attribute } from '../utils/createFieldAttributesEditFields';
+import { object } from 'yup';
 
 export const useForm = () => {
     const [elements, actions] = useStore(
@@ -41,7 +42,7 @@ export const useForm = () => {
             editable: formElement.editable,
             renderElement: formElement.renderComponent,
             attributes: attrs,
-            validations: getValidationsForType(formElement.type),
+            validationsSchema: formElement.validationSchema,
         });
     };
 
@@ -54,12 +55,40 @@ export const useForm = () => {
         }, {});
     };
 
+    const getValidationSchema = () => {
+        let validations: any = {};
+        elements.forEach(el => {
+            validations = { ...validations, [el.name]: { values: el.validations, type: el.validationType } };
+        });
+        console.log({ validations });
+        let schemaObject = {};
+        // validations.forEach((validation: any) => {
+        //     console.log('each ', validation);
+        //     schemaObject = {
+        //         ...schemaObject,
+        //         ...createValidationFieldSchema(validation.values, validation.type),
+        //     };
+        // });
+        console.log('object entries: ', Object.entries(validations));
+        Object.entries(validations).forEach((entry: any) => {
+            schemaObject = {
+                ...schemaObject,
+                [entry[0]]: createValidationFieldSchema(entry[1].values, entry[1].type),
+            };
+        });
+        console.log({ schemaObject });
+        return createValidationSchemaFromObject(schemaObject);
+    };
+
     const validateFormElement = async (id: string) => {
         const element = elements.find(el => el.id === id);
         if (!element) {
             return;
         }
         const schema = createValidationFieldSchema(element.validations, element.validationType);
+        if (!schema) {
+            return;
+        }
         const isValid = await schema.isValid(element.value);
         const errors = await schema.validate(element.value).catch((e: Error) => e.message);
 
@@ -82,5 +111,6 @@ export const useForm = () => {
         resetValidations,
         isElementValidated,
         getInitialValues,
+        getValidationSchema,
     };
 };

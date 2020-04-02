@@ -68,11 +68,8 @@ export const FormElement: React.FC<Props> = (props: Props) => {
                         </Grid>
                     </Grid>
                     <Grid item container direction={'row'} alignItems={'center'} spacing={1}>
-                        <Grid item xs={9}>
+                        <Grid item xs={12}>
                             <div className={classes.elementContainer}>{props.element}</div>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <ValidateActions id={props.id} />
                         </Grid>
                     </Grid>
                 </Grid>
